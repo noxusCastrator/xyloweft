@@ -5,6 +5,9 @@ import ffmpeg
 import whisper
 import torch
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+voice_model=whisper.load_model('turbo').to(device)
+
 def save_json_string_to_file(json_string, file_path):
     """
     将包含JSON的字符串保存到指定路径的文件中。
