@@ -16,7 +16,7 @@
         "hollow":
         {
           "enabled": false,
-          "inner_radius": [5, 5, 5]
+          "inner_radius": [0, 0, 0]
         }
       }
     },
@@ -41,8 +41,8 @@
         {
           "enabled": false,
           "pivot": [0, 0, 0],
-          "inner_radius_top": [4, 4],
-          "inner_radius_bottom": [4, 4]
+          "inner_radius_top": [0, 0],
+          "inner_radius_bottom": [0, 0]
         }
       }
     },
@@ -56,14 +56,14 @@
         "type": "Cuboid",
         "pivot": [0, 0, 0],
         "rotation": [0, 0, 0],
-        "dimension": [10, 10, 8]
+        "dimension": [0, 0, 0]
       },
       "variant":
       {
         "hollow":
         {
           "enabled": false,
-          "inner_dimension": [9, 8, 7]
+          "inner_dimension": [0,0,0]
         }
       }
     }
