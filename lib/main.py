@@ -15,6 +15,12 @@ ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
 current_dir = os.path.dirname(os.path.abspath(__file__))
+model = genai.GenerativeModel('gemini-2.0-flash',generation_config={"response_mime_type": "application/json"})
+with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
+    education = json.load(file_education)
+with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
+    shape = json.load(file_shape)
+
 
 # Load the .env file
 load_dotenv()
@@ -26,7 +32,7 @@ def test():
 
 # Get API keys
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-o3_api_key = os.getenv("O3_API_KEY")
+#o3_api_key = os.getenv("O3_API_KEY")
 
 if not gemini_api_key or not o3_api_key:
     raise ValueError("API keys are missing. Make sure they are set in the .env file.")
@@ -84,10 +90,7 @@ def voice_to_str(location):
     return voice_model.transcribe(location)
 
 
-with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
-    education = json.load(file_education)
-with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
-    shape = json.load(file_shape)
+
 
 
 #################### English to JSON Model #################################
@@ -130,12 +133,12 @@ def parse_shape_instruction(instruction: str, library:str) -> str:
     {voice_translated_text}
 
     """
-    raw_response = client.responses.create(
-    model="gpt-4o",
-    input = [{"role":"user", "content":prompt}]
-    )
-    print(raw_response)
-    print(type(raw_response))
+    #raw_response = client.responses.create(
+    #model="gpt-4o",
+    #input = [{"role":"user", "content":prompt}]
+    #)
+    #print(raw_response)
+    #print(type(raw_response))
 
 
     cleaned_version = raw_response.output_text
