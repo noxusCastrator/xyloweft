@@ -1,0 +1,80 @@
+[
+    {
+      "sphere": {
+        "geotype": "simple",
+        "position": [
+          "0",
+          "0",
+          "1"
+        ],
+        "traits": {
+          "type": "Sphere",
+          "pivot": [
+            "0",
+            "0",
+            "0"
+          ],
+          "rotation": [
+            "None",
+            "None",
+            "None"
+          ],
+          "radius": [
+            "3",
+            "2",
+            "3"
+          ],
+          "subdivision": "None"
+        },
+        "variant": {
+          "hollow": {
+            "enabled": "False",
+            "inner_radius": [
+              "None",
+              "None",
+              "None"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "sphere": {
+        "geotype": "simple",
+        "position": [
+          "10",
+          "-5",
+          "-5"
+        ],
+        "traits": {
+          "type": "Sphere",
+          "pivot": [
+            "0",
+            "0",
+            "0"
+          ],
+          "rotation": [
+            "None",
+            "None",
+            "None"
+          ],
+          "radius": [
+            "2",
+            "2",
+            "2"
+          ],
+          "subdivision": "None"
+        },
+        "variant": {
+          "hollow": {
+            "enabled": "False",
+            "inner_radius": [
+              "None",
+              "None",
+              "None"
+            ]
+          }
+        }
+      }
+    }
+  ]
