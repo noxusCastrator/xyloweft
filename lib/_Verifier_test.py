@@ -79,7 +79,7 @@ def validate_vr_objects(json_data):
                 if any(value <= 0 for value in obj_data["traits"]["radius"]):
                     raise ValueError(f"{obj_name}: 'radius' values must all be positive")
                 
-                if obj_data["variant"]["hollow"]["enabled"]:
+                if obj_data["variant"]["hollow"]["enabled"] == 1:
                     if len(obj_data["variant"]["hollow"]["inner_radius"]) != 3 or any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_radius"]):
                         raise ValueError(f"{obj_name}: 'radius' must be a list of three elements and all values must be positive")
 
@@ -98,7 +98,7 @@ def validate_vr_objects(json_data):
                 if obj_data["traits"]["height"] <= 0:
                     raise ValueError(f"height: 'height' must be a positive int value")
                 
-                if obj_data["variant"]["inner_sub_cylinder"]["enabled"]:
+                if obj_data["variant"]["inner_sub_cylinder"]["enabled"] == 1:
                     for key in ["inner_radius_top", "inner_radius_bottom"]:
                         if key not in obj_data["variant"]["inner_sub_cylinder"] or not isinstance(obj_data["variant"]["inner_sub_cylinder"][key], (list)) or len(obj_data["variant"]["inner_sub_cylinder"][key]) != 2:
                             raise ValueError(f"{obj_name}: '{key}' must be a list of two elements")
@@ -114,7 +114,7 @@ def validate_vr_objects(json_data):
                 if any(value <= 0 for value in obj_data["traits"]["dimension"]):
                     raise ValueError(f"{obj_name}: 'dimension' values must all be positive")
 
-                if obj_data["variant"]["hollow"]["enabled"]:
+                if obj_data["variant"]["hollow"]["enabled"] == 1:
                     if len(obj_data["variant"]["hollow"]["inner_dimension"]) != 3 or any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_dimension"]):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must be a list of three elements and all values must be positive")
 

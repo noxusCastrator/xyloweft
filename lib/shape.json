@@ -15,8 +15,13 @@
       {
         "hollow":
         {
+<<<<<<< HEAD
           "enabled": false,
           "inner_radius": [0, 0, 0]
+=======
+          "enabled": 1,
+          "inner_radius": [5, 5, 5]
+>>>>>>> 62c4630af10b96b57e2391db70fb3629504b3dd3
         }
       }
     },
@@ -30,7 +35,7 @@
         "type": "Cylinder",
         "pivot": [0, 0, 0],
         "rotation": [0, 0, 0],
-        "radius_top": [5,-5],
+        "radius_top": [5,5],
         "radius_bottom": [5,5],
         "height": 10,
         "subdivision": 20
@@ -39,7 +44,7 @@
       {
         "inner_sub_cylinder":
         {
-          "enabled": false,
+          "enabled": 1,
           "pivot": [0, 0, 0],
           "inner_radius_top": [0, 0],
           "inner_radius_bottom": [0, 0]
@@ -62,8 +67,13 @@
       {
         "hollow":
         {
+<<<<<<< HEAD
           "enabled": false,
           "inner_dimension": [0,0,0]
+=======
+          "enabled": 1,
+          "inner_dimension": [9, 8, 7]
+>>>>>>> 62c4630af10b96b57e2391db70fb3629504b3dd3
         }
       }
     }
