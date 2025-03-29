@@ -15,7 +15,7 @@
       {
         "hollow":
         {
-          "enabled": false,
+          "enabled": 1,
           "inner_radius": [5, 5, 5]
         }
       }
@@ -30,7 +30,7 @@
         "type": "Cylinder",
         "pivot": [0, 0, 0],
         "rotation": [0, 0, 0],
-        "radius_top": [5,-5],
+        "radius_top": [5,5],
         "radius_bottom": [5,5],
         "height": 10,
         "subdivision": 20
@@ -39,7 +39,7 @@
       {
         "inner_sub_cylinder":
         {
-          "enabled": false,
+          "enabled": 1,
           "pivot": [0, 0, 0],
           "inner_radius_top": [4, 4],
           "inner_radius_bottom": [4, 4]
@@ -62,7 +62,7 @@
       {
         "hollow":
         {
-          "enabled": false,
+          "enabled": 1,
           "inner_dimension": [9, 8, 7]
         }
       }
