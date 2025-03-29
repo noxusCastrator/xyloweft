@@ -1,0 +1,70 @@
+{
+    "Ball_0":
+    {
+      "geotype": "Simple",
+      "position": [0, 0, 0],
+      "traits":
+      {
+        "type": "Sphere",
+        "pivot": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "radius": [5, 5, 5],
+        "subdivision": 20
+      },
+      "variant":
+      {
+        "hollow":
+        {
+          "enabled": false,
+          "inner_radius": [5, 5, 5]
+        }
+      }
+    },
+  
+    "Cylinder_0":
+    {
+      "geotype": "Simple",
+      "position": [0, 0, 0],
+      "traits":
+      {
+        "type": "Cylinder",
+        "pivot": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "radius_top": [5,5],
+        "radius_bottom": [5,5],
+        "height": 10,
+        "subdivision": 20
+      },
+      "variant":
+      {
+        "inner_sub_cylinder":
+        {
+          "enabled": false,
+          "pivot": [0, 0, 0],
+          "inner_radius_top": 4,
+          "inner_radius_bottom": 4
+        }
+      }
+    },
+  
+    "Cuboid_0":
+    {
+      "geotype": "Simple",
+      "position": [0, 0, 0],
+      "traits":
+      {
+        "type": "Cuboid",
+        "pivot": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "dimension": [10, 10, 8]
+      },
+      "variant":
+      {
+        "hollow":
+        {
+          "enabled": false,
+          "inner_dimension": [9, 8, 7]
+        }
+      }
+    }
+  }
