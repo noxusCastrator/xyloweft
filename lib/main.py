@@ -11,7 +11,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
-
+ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
 
