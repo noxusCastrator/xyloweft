@@ -1,13 +1,13 @@
 import json
 from typing import Dict, Any
 import os 
-# import ffmpeg
+import ffmpeg
 import whisper
 import torch
 from pathlib import Path
 import random
 from openai import OpenAI
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 import os
 
@@ -15,29 +15,31 @@ ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
 current_dir = os.path.dirname(os.path.abspath(__file__))
-model = genai.GenerativeModel('gemini-2.0-flash',generation_config={"response_mime_type": "application/json"})
+
+# Get API keys
+load_dotenv()
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+o3_api_key = os.getenv("O3_API_KEY")
+
+
+client = genai.Client(api_key=gemini_api_key)
+
+
+
+
 with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
     education = json.load(file_education)
 with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
     shape = json.load(file_shape)
 
 
-# Load the .env file
-load_dotenv()
+
 
 
 def test():
     print("muthaphuckaa")
     return 5
 
-# Get API keys
-gemini_api_key = os.getenv("GEMINI_API_KEY")
-#o3_api_key = os.getenv("O3_API_KEY")
-
-if not gemini_api_key or not o3_api_key:
-    raise ValueError("API keys are missing. Make sure they are set in the .env file.")
-
-print("API keys loaded successfully!")
 
 ################## Saving and transporting the data ##################
 
@@ -53,7 +55,6 @@ def save_json_string_to_file(json_string, file_path):
         # 检查文件是否已存在
         if os.path.exists(file_path):
             print(f"文件 {file_path} 已存在，未覆盖。")
-            return
 
         # 确保目标文件夹存在，如果不存在则创建
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -89,13 +90,9 @@ def voice_to_str(location):
 
     return voice_model.transcribe(location)
 
-
-
-
-
 #################### English to JSON Model #################################
 
-def parse_shape_instruction(instruction: str, library:str) -> str:
+def parse_shape_instruction():
     """
     Parses a natural language instruction and extracts shape properties.
     Returns a JSON-formatted string.
@@ -131,8 +128,10 @@ def parse_shape_instruction(instruction: str, library:str) -> str:
 
     接下来你会且只会收到对应的对话,请编辑这段对话并只返还合法的json格式,不要进行任何前缀或后缀或解释。
     {voice_translated_text}
-
     """
+    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+    print(response.text)
+    #save_json_string_to_file(response.text, "C:\\Users\\Mark\\Desktop\\xyloweft\\object_system")
     #raw_response = client.responses.create(
     #model="gpt-4o",
     #input = [{"role":"user", "content":prompt}]
@@ -141,21 +140,22 @@ def parse_shape_instruction(instruction: str, library:str) -> str:
     #print(type(raw_response))
 
 
-    cleaned_version = raw_response.output_text
-    print(cleaned_version)
+    #cleaned_version = raw_response.output_text
+    #print(cleaned_version)
 
-    print(f"cleaned version\n\n\n{cleaned_version}\n\n\n")
+    #print(f"cleaned version\n\n\n{cleaned_version}\n\n\n")
 
-    cleaned_json_text = cleaned_version.replace("```json", "").replace("```", "").strip()
+    #cleaned_json_text = response.replace("```json", "").replace("```", "").strip()
 
-    print(cleaned_json_text)
+    #print(cleaned_json_text)
 
     # Parse the string as JSON
-    parsed_json = json.loads(cleaned_json_text)
+    #parsed_json = json.loads(cleaned_json_text)
 
     # Pretty-print the extracted JSON
-    print(json.dumps(parsed_json, indent=4))
+    #print(json.dumps(parsed_json, indent=4))
 
+parse_shape_instruction()
 
 def validate_vr_objects(json_data):
     """
