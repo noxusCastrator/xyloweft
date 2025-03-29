@@ -201,6 +201,7 @@ def validate_vr_objects(json_data):
 
                 if any(value <= 0 for value in obj_data["traits"]["radius"]):
                     raise ValueError(f"{obj_name}: 'radius' values must all be positive")
+                
 
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
@@ -220,6 +221,13 @@ def validate_vr_objects(json_data):
 
                 if any(value <= 0 for value in obj_data["traits"]["dimension"]):
                     raise ValueError(f"{obj_name}: 'dimension' values must all be positive")
+                
+                # Check hollow condition for Cuboid
+                if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
+                    inner_dimension = obj_data["variant"]["hollow"].get("inner_dimension", [0, 0, 0])
+                    if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
+                        raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
+
 
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
@@ -253,3 +261,4 @@ def transform_json_list(json_list:list):
         transformed_data[key] = obj
     
     return transformed_data
+
