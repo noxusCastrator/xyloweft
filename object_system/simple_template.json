@@ -30,8 +30,8 @@
       "type": "Cylinder",
       "pivot": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "radius_top": [5,5],
-      "radius_bottom": [5,5],
+      "radius_top": 5,
+      "radius_bottom": 5,
       "height": 10,
       "subdivision": 20
     },
@@ -40,9 +40,11 @@
       "inner_sub_cylinder":
       {
         "enabled": false,
-        "pivot": [0, 0, 0],
-        "inner_radius_top": 4,
-        "inner_radius_bottom": 4
+        "inner_pivot": [0, 0, 0],
+        "inner_rotation": [0, 0, 0],
+        "inner_radius_top": 5,
+        "inner_radius_bottom": 5,
+        "inner_subdivision": 20
       }
     }
   },
