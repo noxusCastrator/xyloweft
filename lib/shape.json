@@ -15,8 +15,8 @@
       {
         "hollow":
         {
-          "enabled": 1,
-          "inner_radius": [5, 5, 5]
+          "enabled": 0,
+          "inner_radius": [0, 0, 0]
         }
       }
     },
