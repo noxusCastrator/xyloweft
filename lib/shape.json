@@ -62,7 +62,7 @@
       {
         "hollow":
         {
-          "enabled": false,
+          "enabled": 0,
           "inner_dimension": [0,0,0]
         }
       }
