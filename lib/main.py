@@ -14,8 +14,6 @@ import os
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
-<<<<<<< HEAD
-=======
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Get API keys
@@ -33,27 +31,15 @@ with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as
     education = json.load(file_education)
 with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
     shape = json.load(file_shape)
->>>>>>> c61a1164bb8eea2d851c2be8afab99ffe013a055
 
 
 
 
-<<<<<<< HEAD
-# Get API keys
-gemini_api_key = os.getenv("GEMINI_API_KEY")
-o3_api_key = os.getenv("O3_API_KEY")
-
-if not gemini_api_key or not o3_api_key:
-    raise ValueError("API keys are missing. Make sure they are set in the .env file.")
-
-print("API keys loaded successfully!")
-=======
 
 def test():
     print("muthaphuckaa")
     return 5
 
->>>>>>> c61a1164bb8eea2d851c2be8afab99ffe013a055
 
 ################## Saving and transporting the data ##################
 
@@ -104,22 +90,6 @@ def voice_to_str(location):
 
     return voice_model.transcribe(location)
 
-<<<<<<< HEAD
-
-with open('education.json', 'r', encoding='utf-8') as file_education:
-    # 加载 JSON 数据
-    education = json.load(file_education)
-with open('shape.json', 'r', encoding='utf-8') as file_shape:
-    # 加载 JSON 数据
-    shape = json.load(file_shape)
-
-
-def parse_shape_instruction(instruction: str, library:str) -> str:
-    pass
-
-def replacing_defaults(input_data):
-    pass
-=======
 #################### English to JSON Model #################################
 
 def parse_shape_instruction():
@@ -160,8 +130,10 @@ def parse_shape_instruction():
     {voice_translated_text}
     """
     response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
-    print(response.text)
-    #save_json_string_to_file(response.text, "C:\\Users\\Mark\\Desktop\\xyloweft\\object_system")
+    #print(response.text)
+    cleaned_json_text = response.text.strip("```json").strip("```").strip()
+    print(cleaned_json_text)
+    save_json_string_to_file(cleaned_json_text, "C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail")
     #raw_response = client.responses.create(
     #model="gpt-4o",
     #input = [{"role":"user", "content":prompt}]
@@ -175,7 +147,7 @@ def parse_shape_instruction():
 
     #print(f"cleaned version\n\n\n{cleaned_version}\n\n\n")
 
-    #cleaned_json_text = response.replace("```json", "").replace("```", "").strip()
+    
 
     #print(cleaned_json_text)
 
@@ -186,9 +158,7 @@ def parse_shape_instruction():
     #print(json.dumps(parsed_json, indent=4))
 
 parse_shape_instruction()
->>>>>>> c61a1164bb8eea2d851c2be8afab99ffe013a055
 
-# Verifier
 def validate_vr_objects(json_data):
     """
     Args:
@@ -216,8 +186,8 @@ def validate_vr_objects(json_data):
 
             obj_type = obj_data["traits"].get("type")
 
-            if ("subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4) and not obj_type == "Cuboid":
-                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value (20 >= value >= 4)")
+            if "subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4:
+                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value >= 4")
 
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
@@ -231,10 +201,13 @@ def validate_vr_objects(json_data):
 
                 if any(value <= 0 for value in obj_data["traits"]["radius"]):
                     raise ValueError(f"{obj_name}: 'radius' values must all be positive")
+<<<<<<< HEAD
                 
                 if obj_data["variant"]["hollow"]["enabled"] == 1:
                     if len(obj_data["variant"]["hollow"]["inner_radius"]) != 3 or any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_radius"]):
                         raise ValueError(f"{obj_name}: 'radius' must be a list of three elements and all values must be positive")
+=======
+>>>>>>> 1ed4619e23ae4a826b473c189303c7235021bb7b
 
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
@@ -242,6 +215,7 @@ def validate_vr_objects(json_data):
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], list) or len(obj_data["traits"][key]) != 3:
                         raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
 
+<<<<<<< HEAD
                 for key in ["radius_top", "radius_bottom"]:
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (list)) or len(obj_data["traits"][key]) != 2:
                         raise ValueError(f"{obj_name}: '{key}' must be a list of two elements")
@@ -257,6 +231,11 @@ def validate_vr_objects(json_data):
                             raise ValueError(f"{obj_name}: '{key}' must be a list of two elements")
                         if any(value <= 0 for value in obj_data["variant"]["inner_sub_cylinder"][key]):
                             raise ValueError(f"{obj_name}: '{key}' all values must be positive")
+=======
+                for key in ["radius_positive", "radius_negative"]:
+                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)) or obj_data["traits"][key] <= 0:
+                        raise ValueError(f"{obj_name}: '{key}' must be a positive numeric value")
+>>>>>>> 1ed4619e23ae4a826b473c189303c7235021bb7b
 
             elif obj_type == "Cuboid":
                 required_keys = ["pivot", "rotation", "dimension"]
@@ -267,23 +246,42 @@ def validate_vr_objects(json_data):
                 if any(value <= 0 for value in obj_data["traits"]["dimension"]):
                     raise ValueError(f"{obj_name}: 'dimension' values must all be positive")
 
+<<<<<<< HEAD
                 if obj_data["variant"]["hollow"]["enabled"] == 1:
                     if len(obj_data["variant"]["hollow"]["inner_dimension"]) != 3 or any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_dimension"]):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must be a list of three elements and all values must be positive")
 
+=======
+>>>>>>> 1ed4619e23ae4a826b473c189303c7235021bb7b
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
 
         return True  # Validation successful
-    
+
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
 
+######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):
-    pass
+    """
+    Generate a unique key based on the first letter of geotype, first letter of class name,
+    index in the list, and a random 4-digit number.
+    """
+    random_number = random.randint(1000, 9999)
+    return f"{geotype[0]}{class_name[0]}{index}{random_number}"
 
-
-
-
-def main():
-    pass
+def transform_json_list(json_list:list):
+    """
+    Transform a list of JSON objects into a structured dictionary with encoded keys.
+    """
+    transformed_data = {}
+    
+    for index in json_list:
+        obj = json_list[index]
+        geotype = obj.get("geotype", "S")  # Default to 'S' if missing for simple object
+        class_name = obj.get("class", "C")  # Default to 'C' if missing for cuboid
+        key = generate_unique_key(geotype, class_name, index)
+        
+        transformed_data[key] = obj
+    
+    return transformed_data
