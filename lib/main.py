@@ -14,10 +14,15 @@ import os
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
-
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Load the .env file
 load_dotenv()
+
+
+def test():
+    print("muthaphuckaa")
+    return 5
 
 # Get API keys
 gemini_api_key = os.getenv("GEMINI_API_KEY")
@@ -79,11 +84,9 @@ def voice_to_str(location):
     return voice_model.transcribe(location)
 
 
-with open('education.json', 'r', encoding='utf-8') as file_education:
-    # 加载 JSON 数据
+with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
     education = json.load(file_education)
-with open('shape.json', 'r', encoding='utf-8') as file_shape:
-    # 加载 JSON 数据
+with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
     shape = json.load(file_shape)
 
 
