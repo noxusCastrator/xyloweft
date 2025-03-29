@@ -90,7 +90,7 @@ with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as fil
     shape = json.load(file_shape)
 
 
-def parse_shape_instruction(instruction: str, library:str) -> str:
+def parse_shape_instruction(instruction: str, library:str):
     pass
 
 def replacing_defaults(input_data):
@@ -190,6 +190,3 @@ def transform_json_list(json_list:list):
         transformed_data[key] = obj
     
     return transformed_data
-
-def main():
-    pass
