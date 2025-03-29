@@ -4,9 +4,17 @@ import os
 import ffmpeg
 import whisper
 import torch
+from pathlib import Path
+import random
+from openai import OpenAI
+import google.generativeai as genai
+
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
+
+
+################## Saving and transporting the data ##################
 
 def save_json_string_to_file(json_string, file_path):
     """
@@ -41,8 +49,29 @@ def save_json_string_to_file(json_string, file_path):
 def search_files_by_time(folder: str):
     pass
 
-def voice_to_str(location:str):
-    pass
+#################### Voice to str #################################
+
+def voice_to_str(location):
+    """
+    convert an audio to word
+    requires and only requires 6gb VRAM
+    do not convert mp3 with bgm
+
+    Args:
+        models (str): the transcrib model to be used. requires pre-load of model to ensure functionality(see line 4 for detail)
+        location (str): specific location of the audio, all "\" need to be converted to "\\" to ensure functionality
+    """
+
+    return voice_model.transcribe(location)
+
+
+with open('education.json', 'r', encoding='utf-8') as file_education:
+    # 加载 JSON 数据
+    education = json.load(file_education)
+with open('shape.json', 'r', encoding='utf-8') as file_shape:
+    # 加载 JSON 数据
+    shape = json.load(file_shape)
+
 
 def parse_shape_instruction(instruction: str, library:str) -> str:
     pass
