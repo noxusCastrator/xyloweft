@@ -1,6 +1,7 @@
-[
+
     {
-      "sphere": {
+      "sphere":
+      {
         "geotype": "simple",
         "position": [
           "0",
@@ -36,9 +37,7 @@
             ]
           }
         }
-      }
-    },
-    {
+      },
       "sphere": {
         "geotype": "simple",
         "position": [
@@ -77,4 +76,3 @@
         }
       }
     }
-  ]

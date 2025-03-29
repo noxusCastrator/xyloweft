@@ -1,0 +1,43 @@
+{
+  "sphere":
+  {
+    "geotype": "Simple",
+        "position": [0, 0, 0],
+        "traits":
+        {
+          "type": "Sphere",
+          "pivot": [0, 0, 0],
+          "rotation": [0, 0, 0],
+          "radius": [6, 6, 6],
+          "subdivision": 20
+        },
+        "variant":
+        {
+          "hollow":
+          {
+            "enabled": false,
+            "inner_radius": [1, 1, 1]
+          }
+        }
+      },
+      "Cuboid":
+      {
+        "geotype": "Simple",
+        "position": [10, 10, 10],
+        "traits":
+        {
+          "type": "Cuboid",
+          "pivot": [0, 0, 0],
+          "rotation": [0, 0, 0],
+          "Dimention": [3, 3, 3]
+        },
+        "variant":
+        {
+          "hollow":
+          {
+            "enabled": false,
+            "inner_dimention": [0, 0, 0]
+          }
+        }
+      }
+    }
