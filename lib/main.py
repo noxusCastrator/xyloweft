@@ -14,25 +14,14 @@ import os
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-model = genai.GenerativeModel('gemini-2.0-flash',generation_config={"response_mime_type": "application/json"})
-with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
-    education = json.load(file_education)
-with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
-    shape = json.load(file_shape)
 
 
 # Load the .env file
 load_dotenv()
 
-
-def test():
-    print("muthaphuckaa")
-    return 5
-
 # Get API keys
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-#o3_api_key = os.getenv("O3_API_KEY")
+o3_api_key = os.getenv("O3_API_KEY")
 
 if not gemini_api_key or not o3_api_key:
     raise ValueError("API keys are missing. Make sure they are set in the .env file.")
@@ -90,73 +79,21 @@ def voice_to_str(location):
     return voice_model.transcribe(location)
 
 
+with open('education.json', 'r', encoding='utf-8') as file_education:
+    # 加载 JSON 数据
+    education = json.load(file_education)
+with open('shape.json', 'r', encoding='utf-8') as file_shape:
+    # 加载 JSON 数据
+    shape = json.load(file_shape)
 
-
-
-#################### English to JSON Model #################################
 
 def parse_shape_instruction(instruction: str, library:str) -> str:
-    """
-    Parses a natural language instruction and extracts shape properties.
-    Returns a JSON-formatted string.
-    """
+    pass
 
-    voice_translated_text = "generate in the following order: first generate a ball with radius 1 at 0, 0, 0, then generate a cube with sidelength 2 on the first ball, then ball with radius 3 on the second cube, then cube with sidelength 4 on ball 3, then ball with radius 5 on cube 4"#voice_to_str("D:\\test.m4a")
-    prompt = f"""
-    需求
+def replacing_defaults(input_data):
+    pass
 
-    目前我们希望你成为一个文字转json的应用。我们会提供给你一段话,这段话通常来自于物理课或数学课,是一个教授说的需要解的题的录音,我们最终的目的是将这段话转成houdini内部的3D模型。你的任务通过以下流程从这句话里抽象出一串json用来让我们生成3D模型。
-
-    这是一个教学提示词,你不需要任何正式回复,但请不要忽视这段话里的任何细节
-
-    基础定义
-
-    此处我们先定义三种体：简单体,复杂体和虚拟体,简单体是一个虚拟定义,指一切简单到不需要去通过布尔运算来生成的几何体,如立方体,球体等,复杂体指一切需要通过布尔运算编辑几何体来生成的复杂物件。换句话说,简单体是可以通过平面透视的三视图无损传达的体,而复杂体无法这么传达。虚拟体是一个概念,是对某个物体的交互,在我们达到那个进度之前请不用考虑复杂体和虚拟体。
-
-    文档
-
-    我们在此提供给你一个模板文件“shape.json”,里头含有所有我们可能你需要去生成的“体”的模板,这是一个需要填空的json库,里头的值均以None来表达
-
-    {shape}
-
-    然后,我们会提供给你以下拿中括号标记的dict(无法读取大括号生成的dict顾出此下策),键是体的名称,值是对这个体的定义和阐释,请根据值的定义来圈定对一个体的定义域,充分运用你作为人工智能的数据库来理解这个体的定义,根据语境将语境中的物件抽象成我们需要的体。
-
-    ["sphere":"一个球体,指可以抽象成球体的词"]
-
-    最后,我们会提供给你一个教学文件“education.json”,里头含有dict的键的名称对应的体的教学文件。education.json的语法格式与shape.json完全相同,但education.json的值不是需要填的空而是对应值相关的教学。当你在一句话里检索到dict里的某个键时,根据键的定义检索到education.json里的某个值来进行学习。
-
-    {education}
-
-    在你收到对话后,请通过dict提供的完整定义来寻找这句话里可能出现的体并将这个体抽象出来,请根据这个体所指代的键的名称到shape.json和education.json里寻路到键的名称所代表的名称中,根据education.json所诠释的定义在shape.json里将None更改为检索到的数值,如果未检索到对应参数则不要进行编辑,保留shape.json里未填空的格式。请注意,education.json的教学至关重要,请严格遵守,遍历完这句话并生成完整的json后请回到shape.json逐行逐列检索以确定生成的json合法。你可能会在一句话里检索到复数个体,请明确对应的指代并返还所有需要生成的体。
-
-    接下来你会且只会收到对应的对话,请编辑这段对话并只返还合法的json格式,不要进行任何前缀或后缀或解释。
-    {voice_translated_text}
-
-    """
-    #raw_response = client.responses.create(
-    #model="gpt-4o",
-    #input = [{"role":"user", "content":prompt}]
-    #)
-    #print(raw_response)
-    #print(type(raw_response))
-
-
-    cleaned_version = raw_response.output_text
-    print(cleaned_version)
-
-    print(f"cleaned version\n\n\n{cleaned_version}\n\n\n")
-
-    cleaned_json_text = cleaned_version.replace("```json", "").replace("```", "").strip()
-
-    print(cleaned_json_text)
-
-    # Parse the string as JSON
-    parsed_json = json.loads(cleaned_json_text)
-
-    # Pretty-print the extracted JSON
-    print(json.dumps(parsed_json, indent=4))
-
-
+# Verifier
 def validate_vr_objects(json_data):
     """
     Args:
@@ -184,8 +121,8 @@ def validate_vr_objects(json_data):
 
             obj_type = obj_data["traits"].get("type")
 
-            if "subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4:
-                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value >= 4")
+            if ("subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4) and not obj_type == "Cuboid":
+                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value (20 >= value >= 4)")
 
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
@@ -199,6 +136,10 @@ def validate_vr_objects(json_data):
 
                 if any(value <= 0 for value in obj_data["traits"]["radius"]):
                     raise ValueError(f"{obj_name}: 'radius' values must all be positive")
+                
+                if obj_data["variant"]["hollow"]["enabled"]:
+                    if len(obj_data["variant"]["hollow"]["inner_radius"]) != 3 or any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_radius"]):
+                        raise ValueError(f"{obj_name}: 'radius' must be a list of three elements and all values must be positive")
 
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
@@ -206,9 +147,21 @@ def validate_vr_objects(json_data):
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], list) or len(obj_data["traits"][key]) != 3:
                         raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
 
-                for key in ["radius_positive", "radius_negative"]:
-                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)) or obj_data["traits"][key] <= 0:
-                        raise ValueError(f"{obj_name}: '{key}' must be a positive numeric value")
+                for key in ["radius_top", "radius_bottom"]:
+                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (list)) or len(obj_data["traits"][key]) != 2:
+                        raise ValueError(f"{obj_name}: '{key}' must be a list of two elements")
+                    if obj_data["traits"][key][0] <= 0 or obj_data["traits"][key][1] <= 0:
+                        raise ValueError(f"{obj_name}: '{key}' values must all be positive")
+
+                if obj_data["traits"]["height"] <= 0:
+                    raise ValueError(f"height: 'height' must be a positive int value")
+                
+                if obj_data["variant"]["inner_sub_cylinder"]["enabled"]:
+                    for key in ["inner_radius_top", "inner_radius_bottom"]:
+                        if key not in obj_data["variant"]["inner_sub_cylinder"] or not isinstance(obj_data["variant"]["inner_sub_cylinder"][key], (list)) or len(obj_data["variant"]["inner_sub_cylinder"][key]) != 2:
+                            raise ValueError(f"{obj_name}: '{key}' must be a list of two elements")
+                        if any(value <= 0 for value in obj_data["variant"]["inner_sub_cylinder"][key]):
+                            raise ValueError(f"{obj_name}: '{key}' all values must be positive")
 
             elif obj_type == "Cuboid":
                 required_keys = ["pivot", "rotation", "dimension"]
@@ -219,35 +172,23 @@ def validate_vr_objects(json_data):
                 if any(value <= 0 for value in obj_data["traits"]["dimension"]):
                     raise ValueError(f"{obj_name}: 'dimension' values must all be positive")
 
+                if obj_data["variant"]["hollow"]["enabled"]:
+                    if len(obj_data["variant"]["hollow"]["inner_dimension"]) != 3 or any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_dimension"]):
+                        raise ValueError(f"{obj_name}: 'inner_dimension' must be a list of three elements and all values must be positive")
+
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
 
         return True  # Validation successful
-
+    
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
 
-######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):
-    """
-    Generate a unique key based on the first letter of geotype, first letter of class name,
-    index in the list, and a random 4-digit number.
-    """
-    random_number = random.randint(1000, 9999)
-    return f"{geotype[0]}{class_name[0]}{index}{random_number}"
+    pass
 
-def transform_json_list(json_list:list):
-    """
-    Transform a list of JSON objects into a structured dictionary with encoded keys.
-    """
-    transformed_data = {}
-    
-    for index in json_list:
-        obj = json_list[index]
-        geotype = obj.get("geotype", "S")  # Default to 'S' if missing for simple object
-        class_name = obj.get("class", "C")  # Default to 'C' if missing for cuboid
-        key = generate_unique_key(geotype, class_name, index)
-        
-        transformed_data[key] = obj
-    
-    return transformed_data
+
+
+
+def main():
+    pass

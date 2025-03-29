@@ -1,9 +1,41 @@
 # Verifier_test
 import json
 import os
-json_data = open('shape.json', 'r', encoding='utf-8')
+with open('shape.json', 'r', encoding='utf-8') as file_shape:
+    # 加载 JSON 数据
+    shape = json.load(file_shape)
 
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
+def save_json_string_to_file(json_string, file_path):
+    """
+    将包含JSON的字符串保存到指定路径的文件中。
+
+    :param json_string: 包含JSON的字符串
+    :param file_path: 目标文件路径（包括文件名）
+    :param overwrite: 是否覆盖已存在的文件(默认为False)
+    """
+    try:
+        # 检查文件是否已存在
+        if os.path.exists(file_path):
+            print(f"文件 {file_path} 已存在，未覆盖。")
+            return
+
+        # 确保目标文件夹存在，如果不存在则创建
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # 将字符串解析为JSON对象（确保字符串是有效的JSON）
+        json_data = json.loads(json_string)
+
+        # 将JSON数据写入文件
+        with open(file_path, 'w', encoding='utf-8') as file:
+            json.dump(json_data, file, ensure_ascii=False, indent=4)
+
+        print(f"JSON数据已成功保存到 {file_path}")
+    except json.JSONDecodeError as e:
+        print(f"JSON字符串解析失败: {e}")
+    except Exception as e:
+        print(f"保存文件时发生错误: {e}")
+
 def validate_vr_objects(json_data):
     """
     Args:
@@ -31,7 +63,7 @@ def validate_vr_objects(json_data):
 
             obj_type = obj_data["traits"].get("type")
 
-            if "subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4:
+            if ("subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4) and not obj_type == "Cuboid":
                 raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value (20 >= value >= 4)")
 
             if obj_type not in ALLOWED_CLASS:
@@ -60,7 +92,7 @@ def validate_vr_objects(json_data):
                 for key in ["radius_top", "radius_bottom"]:
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (list)) or len(obj_data["traits"][key]) != 2:
                         raise ValueError(f"{obj_name}: '{key}' must be a list of two elements")
-                    if obj_data["traits"][key][0] or obj_data["traits"][key][1]:
+                    if obj_data["traits"][key][0] <= 0 or obj_data["traits"][key][1] <= 0:
                         raise ValueError(f"{obj_name}: '{key}' values must all be positive")
 
                 if obj_data["traits"]["height"] <= 0:
@@ -91,7 +123,10 @@ def validate_vr_objects(json_data):
 
         return True  # Validation successful
     
+    except (ValueError, TypeError, json.JSONDecodeError) as e:
+        return f"Validation Error: {e}"
+    
 def main():
-    print(validate_vr_objects(json_data))
+    print(validate_vr_objects(shape))
 
 main()
