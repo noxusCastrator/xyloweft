@@ -166,11 +166,30 @@ def validate_vr_objects(json_data):
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
 
+######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):
-    pass
+    """
+    Generate a unique key based on the first letter of geotype, first letter of class name,
+    index in the list, and a random 4-digit number.
+    """
+    random_number = random.randint(1000, 9999)
+    return f"{geotype[0]}{class_name[0]}{index}{random_number}"
 
-
-
+def transform_json_list(json_list:list):
+    """
+    Transform a list of JSON objects into a structured dictionary with encoded keys.
+    """
+    transformed_data = {}
+    
+    for index in json_list:
+        obj = json_list[index]
+        geotype = obj.get("geotype", "S")  # Default to 'S' if missing for simple object
+        class_name = obj.get("class", "C")  # Default to 'C' if missing for cuboid
+        key = generate_unique_key(geotype, class_name, index)
+        
+        transformed_data[key] = obj
+    
+    return transformed_data
 
 def main():
     pass
