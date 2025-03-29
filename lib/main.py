@@ -126,7 +126,7 @@ def parse_shape_instruction():
 
     在你收到对话后,请通过dict提供的完整定义来寻找这句话里可能出现的体并将这个体抽象出来,请根据这个体所指代的键的名称到shape.json和education.json里寻路到键的名称所代表的名称中,根据education.json所诠释的定义在shape.json里将None更改为检索到的数值,如果未检索到对应参数则不要进行编辑,保留shape.json里未填空的格式。请注意,education.json的教学至关重要,请严格遵守,遍历完这句话并生成完整的json后请回到shape.json逐行逐列检索以确定生成的json合法。你可能会在一句话里检索到复数个体,请明确对应的指代并返还所有需要生成的体。
 
-    接下来你会且只会收到对应的对话,请编辑这段对话并只返还合法的json格式,不要进行任何前缀或后缀或解释。
+    接下来你会且只会收到对应的对话,请编辑这段对话并只返还合法的json格式,不要进行任何前缀或后缀或解释,不要使用单引号。
     {voice_translated_text}
     """
     response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
