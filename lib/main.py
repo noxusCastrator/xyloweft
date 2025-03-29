@@ -130,8 +130,10 @@ def parse_shape_instruction():
     {voice_translated_text}
     """
     response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
-    print(response.text)
-    #save_json_string_to_file(response.text, "C:\\Users\\Mark\\Desktop\\xyloweft\\object_system")
+    #print(response.text)
+    cleaned_json_text = response.text.strip("```json").strip("```").strip()
+    print(cleaned_json_text)
+    save_json_string_to_file(cleaned_json_text, "C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail")
     #raw_response = client.responses.create(
     #model="gpt-4o",
     #input = [{"role":"user", "content":prompt}]
@@ -145,7 +147,7 @@ def parse_shape_instruction():
 
     #print(f"cleaned version\n\n\n{cleaned_version}\n\n\n")
 
-    #cleaned_json_text = response.replace("```json", "").replace("```", "").strip()
+    
 
     #print(cleaned_json_text)
 
