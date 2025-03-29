@@ -8,10 +8,20 @@ from pathlib import Path
 import random
 from openai import OpenAI
 import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
+
+
+# Load the .env file
+load_dotenv()
+
+# Get API keys
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+o3_api_key = os.getenv("O3_API_KEY")
 
 
 ################## Saving and transporting the data ##################
