@@ -33,7 +33,7 @@ def test():#测试是否能正确调取
 
 def get_current_time():
     now = datetime.now()
-    return f"{now.day}{now.hour}{now.minute}{now.second}"
+    return f"{now.day:02d}{now.hour:02d}{now.minute:02d}{now.second:02d}"
 
 
 def create_empty_json(folder_path, file_name):
