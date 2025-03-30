@@ -1,88 +1,88 @@
 {
     "Sphere Class":
     {
-      "geotype": "Simple;格式双引号标注的string",
-      "position": "该体所对应的几何中心点,如未曾提到且只生成一个体则设定为[0,0,0], 如果要生成多个体则根据检索先后顺序放置到合适的不会重叠的位置，格式[x轴坐标, y轴坐标,z轴坐标]",
-      "rotate": "直接填入[0, 0, 0]",
-      "scale": "直接填入[1, 1, 1]",
+      "geotype": "Simple; a string enclosed in double quotes",
+      "position": "The geometric center point of the object. If not mentioned and only one object is generated, set it to [0,0,0]. If multiple objects are generated, place them in appropriate non-overlapping positions based on the order of retrieval. Format: [x-coordinate, y-coordinate, z-coordinate]",
+      "rotate": "Directly set to [0, 0, 0]",
+      "scale": "Directly set to [1, 1, 1]",
       "traits":
       {
-        "type": "直接填写sphere;格式双引号标注的string",
-        "pivot": "该体对应的操作轴,是一个相对于position位置的值,未提到则默认[0, 0, 0],如果提到移动pivot之类的关键字则基于position的位置进行移动",
-        "rotation": "该体被直接描述的旋转,格式[x轴旋转, y轴旋转,z轴旋转],如未提到则默认为[0,0,0]",
-        "radius": "该体的的半径,句子可能会拿sphere指代椭球体,故球体可能会有三个参数,如提到三个参数则将三个参数填入,格式[长,宽,高],它们应该是float类型",
-        "subdivision": "houdini特有的定义,即这个体按多少面体来计算, 应该是一个int格式的数值, 如果后面subdivision的值为1, 该值应该为20"
+        "type": "Directly set to 'sphere'; a string enclosed in double quotes",
+        "pivot": "The operation axis of the object, relative to the position. If not mentioned, default is [0, 0, 0]. If keywords like 'move pivot' are mentioned, adjust based on the position.",
+        "rotation": "The explicitly described rotation of the object. Format: [x-rotation, y-rotation, z-rotation]. If not mentioned, default is [0,0,0].",
+        "radius": "The radius of the object. The term 'sphere' may sometimes refer to an ellipsoid, so there could be three parameters. If three parameters are mentioned, fill them in the format [length, width, height], which should be of float type.",
+        "subdivision": "A Houdini-specific definition, representing the number of faces for the object. Should be an int value. If the subdivision value is 1, this value should be 20."
       },
       "variant":
       {
         "hollow":
         {
-          "enabled": "该体是否中空,如句子中检索到中空相关的的词则为1,反之0,格式int",
-          "pivot": "该体对应的操作轴,是一个相对于position位置的值,未提到则默认[0, 0, 0],如果提到移动pivot之类的关键字则基于position的位置进行移动",
-          "inner_radius": "该体的内径的长宽高,如句子中未检索到中空或未提到内径内径则保持原格式,格式[内径长,内径宽,内径高]"
+          "enabled": "Whether the object is hollow. Set to 1 if hollow-related terms are detected in the sentence, otherwise 0. Format: int.",
+          "pivot": "The operation axis of the hollow part, relative to the position. If not mentioned, default is [0, 0, 0]. If keywords like 'move pivot' are mentioned, adjust based on the position.",
+          "inner_radius": "The inner radius dimensions of the object. If hollow-related terms are not mentioned or no inner radius is specified, keep the original format. Format: [inner length, inner width, inner height]."
         },
         "subdivided": 
         {
-            "enabled": "判断这个体是否需要曲面计算, 如果你认为这个体实际上应该是一个球或者听到了关联词, 则设置为1, 反之为0, type为int, 当该值为1时, 上面的subdivision的value应该为20"
+            "enabled": "Determine whether this object requires surface calculation. If the object should be a sphere or related terms are heard, set to 1; otherwise, 0. Type: int. When this value is 1, the subdivision value above should be 20."
         }
       }
     },
 
     "Cuboid":
     {
-      "geotype": "Simple;格式双引号标注的string",
-      "position": "该体所对应的几何中心点,如未曾提到且只生成一个体则设定为[0,0,0], 如果要生成多个体则根据检索先后顺序放置到合适的不会重叠的位置，格式[x轴坐标, y轴坐标,z轴坐标]",
-      "rotate": "直接填入[0, 0, 0]",
-      "scale": "直接填入[1, 1, 1]",
+      "geotype": "Simple; a string enclosed in double quotes",
+      "position": "The geometric center point of the object. If not mentioned and only one object is generated, set it to [0,0,0]. If multiple objects are generated, place them in appropriate non-overlapping positions based on the order of retrieval. Format: [x-coordinate, y-coordinate, z-coordinate]",
+      "rotate": "Directly set to [0, 0, 0]",
+      "scale": "Directly set to [1, 1, 1]",
       "traits":
       {
-        "type": "直接填写cuboid;格式双引号标注的string",
-        "pivot": "该体对应的操作轴,是一个相对于position位置的值,未提到则默认[0, 0, 0],如果提到移动pivot之类的关键字则基于position的位置进行移动",
-        "rotation": "该体被直接描述的旋转,格式[x轴旋转, y轴旋转,z轴旋转],如未提到则默认为[0,0,0]",
-        "dimention": "一个list,决定了该几何体的尺寸,格式如下[x轴方向上的长度, y轴方向上的长度, z轴方向上的长度]"
+        "type": "Directly set to 'cuboid'; a string enclosed in double quotes",
+        "pivot": "The operation axis of the object, relative to the position. If not mentioned, default is [0, 0, 0]. If keywords like 'move pivot' are mentioned, adjust based on the position.",
+        "rotation": "The explicitly described rotation of the object. Format: [x-rotation, y-rotation, z-rotation]. If not mentioned, default is [0,0,0].",
+        "dimention": "A list determining the dimensions of the object. Format: [length along the x-axis, length along the y-axis, length along the z-axis]."
       },
       "variant":
       {
         "hollow":
         {
-          "enabled": "该体是否中空,如句子中检索到中空相关的的词则为1,反之0,格式int",
-          "pivot":"该体内部中空对应的操作轴,是一个相对于position位置的值,未提到则默认[0, 0, 0],如果提到移动pivot之类的关键字则基于position的位置进行移动",
-          "inner_dimention": "中空的尺寸,格式为[x轴上的中空长度, y轴上的中空长度, z轴上的中空长度]"
+          "enabled": "Whether the object is hollow. Set to 1 if hollow-related terms are detected in the sentence, otherwise 0. Format: int.",
+          "pivot": "The operation axis of the hollow part, relative to the position. If not mentioned, default is [0, 0, 0]. If keywords like 'move pivot' are mentioned, adjust based on the position.",
+          "inner_dimention": "The dimensions of the hollow part. Format: [hollow length along the x-axis, hollow length along the y-axis, hollow length along the z-axis]."
         }
       }
     },
 
     "Pyramid Class":
     {
-      "geotype": "直接填写Simple;格式双引号标注的string",
-      "position": "该体所对应的几何中心点,如未曾提到且只生成一个体则设定为[0,0,0], 如果要生成多个体则根据检索先后顺序放置到合适的不会重叠的位置，格式[x轴坐标, y轴坐标,z轴坐标]",
-      "rotate": "直接填入[0, 0, 0]",
-      "scale": "直接填入[1, 1, 1]",
+      "geotype": "Directly set to 'Simple'; a string enclosed in double quotes",
+      "position": "The geometric center point of the object. If not mentioned and only one object is generated, set it to [0,0,0]. If multiple objects are generated, place them in appropriate non-overlapping positions based on the order of retrieval. Format: [x-coordinate, y-coordinate, z-coordinate]",
+      "rotate": "Directly set to [0, 0, 0]",
+      "scale": "Directly set to [1, 1, 1]",
       "traits":
       {
-        "type": "pyramid;格式双引号标注的string",
-        "pivot": "该体对应的操作轴,是一个相对于position位置的值,未提到则默认[0, 0, 0],如果提到移动pivot之类的关键字则基于position的位置进行移动",
-        "rotation": "该体被直接描述的旋转,格式[x轴旋转, y轴旋转,z轴旋转],如未提到则默认为[0,0,0]",
-        "radius_top": "该体的顶部的半径, 格式[x轴上的长度, y轴上的长度], 该list里的元素应该是float类型, 如果提到该物体是圆锥的话该数值可能为[0,0,0]",
-        "radius_bottom": "该体的底部的半径, 格式[x轴上的长度, y轴上的长度], 该list里的元素应该是float类型, 如果提到该物体是圆锥的话该数值可能为[0,0,0]",
-        "height": "这个体的高, 应该是一个int或者float类型的数值",
-        "subdivision": "基本可以直接理解为棱数,如果是三棱台则为3,四棱台则为4,以此类推,未提到则默认为20"
+        "type": "pyramid; a string enclosed in double quotes",
+        "pivot": "The operation axis of the object, relative to the position. If not mentioned, default is [0, 0, 0]. If keywords like 'move pivot' are mentioned, adjust based on the position.",
+        "rotation": "The explicitly described rotation of the object. Format: [x-rotation, y-rotation, z-rotation]. If not mentioned, default is [0,0,0].",
+        "radius_top": "The radius of the top of the object. Format: [length along the x-axis, length along the y-axis]. The elements in the list should be of float type. If the object is referred to as a cone, this value may be [0,0,0].",
+        "radius_bottom": "The radius of the bottom of the object. Format: [length along the x-axis, length along the y-axis]. The elements in the list should be of float type. If the object is referred to as a cone, this value may be [0,0,0].",
+        "height": "The height of the object. Should be an int or float value.",
+        "subdivision": "Essentially represents the number of edges. For a triangular prism, set to 3; for a quadrangular prism, set to 4, and so on. If not mentioned, default is 20."
       },
       "variant":
       {
         "inner_sub_cylinder":
         {
-          "enabled": "是否在体内添加中空,提到相关词汇则为1,未提到则为0",
-          "inner_pivot": "该体对应的操作轴,是一个相对于position位置的值,未提到则默认[0, 0, 0],如果提到移动pivot之类的关键字则基于position的位置进行移动",
-          "inner-rotation":"内部的旋转，格式[x轴旋转, y轴旋转,z轴旋转],如未提到则默认为[0,0,0]",
-          "inner_radius_top": "在该物体顶部的中空半径, 格式为[x轴上的中空长度, y轴上的中空长度],如果提到了类似管状或中空的词但没有提供内径则默认为radius_top-1",
-          "inner_radius_bottom": "在该物体底部的中空半径, 格式为[x轴上的中空长度, y轴上的中空长度],如果提到了类似管状或中空的词但没有提供内径则默认为radius_buttom-1",
-          "inner_height": "该物体内部中空的高,是一个int或者float类型的值,如果提到了类似管状或中空的词但没有提供内径则默认为height",
-          "inner_subdivision": "基本可以直接理解为内部的棱数,如果是三棱台则为3,四棱台则为4,以此类推,未提到则默认为20"
+          "enabled": "Whether to add a hollow part inside the object. Set to 1 if related terms are mentioned, otherwise 0.",
+          "inner_pivot": "The operation axis of the hollow part, relative to the position. If not mentioned, default is [0, 0, 0]. If keywords like 'move pivot' are mentioned, adjust based on the position.",
+          "inner-rotation": "The internal rotation. Format: [x-rotation, y-rotation, z-rotation]. If not mentioned, default is [0,0,0].",
+          "inner_radius_top": "The inner radius at the top of the object. Format: [hollow length along the x-axis, hollow length along the y-axis]. If terms like 'tubular' or 'hollow' are mentioned but no inner radius is provided, default to radius_top-1.",
+          "inner_radius_bottom": "The inner radius at the bottom of the object. Format: [hollow length along the x-axis, hollow length along the y-axis]. If terms like 'tubular' or 'hollow' are mentioned but no inner radius is provided, default to radius_buttom-1.",
+          "inner_height": "The height of the internal hollow part. Should be an int or float value. If terms like 'tubular' or 'hollow' are mentioned but no inner height is provided, default to height.",
+          "inner_subdivision": "Essentially represents the number of internal edges. For a triangular prism, set to 3; for a quadrangular prism, set to 4, and so on. If not mentioned, default is 20."
         },
         "subdivided": 
         {
-            "enabled": "判断这个体是否需要曲面计算, 如果这个体被称为圆柱或圆锥或圆台等类似词汇或subdivision值为20则设置为1, 反之为0, type为int"
+            "enabled": "Determine whether this object requires surface calculation. If the object is referred to as a cylinder, cone, truncated cone, or similar terms, or if the subdivision value is 20, set to 1; otherwise, 0. Type: int."
         }
       }
     }
