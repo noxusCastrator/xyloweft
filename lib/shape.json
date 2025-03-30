@@ -4,7 +4,7 @@
     "geotype": "Simple",
     "position": [0, 0, 0],
     "rotate": [0, 0, 0],
-    "scale": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Sphere",
@@ -33,7 +33,7 @@
     "geotype": "Simple",
     "position": [0, 0, 0],
     "rotate": [0, 0, 0],
-    "scale": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Cuboid",
@@ -57,7 +57,7 @@
     "geotype": "Simple",
     "position": [0, 0, 0],
     "rotate": [0, 0, 0],
-    "scale": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Pyramid",
@@ -72,10 +72,10 @@
     {
       "inner_sub_cylinder":
       {
-        "enabled": 0,
+        "enabled": 1,
         "inner_pivot": [0, 0, 0],
         "inner_rotation": [0, 0, 0],
-        "inner_radius_top": 4,
+        "inner_radius_top": -4,
         "inner_radius_bottom": 4,
         "inner_height": 10,
         "inner_subdivision": 20
