@@ -2,6 +2,8 @@
   "qiulei-0": {
     "geotype": "Simple",
     "position": [-10, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits": {
       "type": "Sphere",
       "pivot": [0, 0, 0],
