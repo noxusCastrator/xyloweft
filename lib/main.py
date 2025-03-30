@@ -193,9 +193,6 @@ def validate_vr_objects(json_data):
 
             obj_type = obj_data["traits"].get("type")
 
-            if "subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4:
-                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value >= 4")
-
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
 
