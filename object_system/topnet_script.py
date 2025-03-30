@@ -194,6 +194,7 @@ class GeoGenerator:
         inner_height = whether_hollowed.get("inner_height")
         inner_subdivision = whether_hollowed.get("inner_subdivision")
 
+        now_sop.parm("cap").set(True)
         now_sop.parm("type").set(1)
         now_sop.parm("rad1").set(radius_top)
         now_sop.parm("rad2").set(radius_bottom)
@@ -218,8 +219,6 @@ class GeoGenerator:
             # 美观排列节点
             subdivide_sop.moveToGoodPosition()
 
-            pyramid_sop.parm("scale").set(1.07)
-
             now_sop = subdivide_sop
 
         bool_sub_sop = geo_node.createNode("boolean", "boolean_sub")
@@ -234,6 +233,7 @@ class GeoGenerator:
             inner_pyramid_sop.parm("type").set(1)
 
             now_sop = inner_pyramid_sop
+            now_sop.parm("cap").set(True)
             now_sop.parm("rad1").set(inner_radius_top)
             now_sop.parm("rad2").set(inner_radius_bottom)
             now_sop.parm("height").set(inner_height)
