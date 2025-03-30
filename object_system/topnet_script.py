@@ -81,6 +81,7 @@ class GeoGenerator:
         traits 应包含 "width", "height", "depth"
         """
 
+        print("开始生成长方体")
         sop_name = "cuboid_sop"
         existing_sop = geo_node.node(sop_name)
 
@@ -95,11 +96,11 @@ class GeoGenerator:
         else:
             box_sop = existing_sop
 
-        dimension = traits.get("dimension", [1, 1, 1])
-        width  = traits.get(dimension[0], 1)
-        height = traits.get(dimension[1], 1)
-        depth  = traits.get(dimension[2], 1)
-        box_sop.parmTuple("size").set((width, height, depth))
+        dimension = traits.get("dimension")
+        print(dimension)
+        box_sop.parm("sizex").set(dimension[0])
+        box_sop.parm("sizey").set(dimension[0])
+        box_sop.parm("sizez").set(dimension[0])
 
         return box_sop
 

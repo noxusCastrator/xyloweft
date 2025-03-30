@@ -16,6 +16,7 @@
       "hollow":
       {
         "enabled": 0,
+        "pivot": [0, 0, 0],
         "inner_radius": [4, 4, 4]
       },
       "subdivided":
@@ -41,6 +42,7 @@
       "hollow":
       {
         "enabled": 0,
+        "pivot": [0, 0, 0],
         "inner_dimension": [9, 8, 7]
       }
     }
