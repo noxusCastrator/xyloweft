@@ -124,6 +124,10 @@ def validate_vr_objects(json_data):
                         raise ValueError(f"{obj_name}: 'inner_radius_top' must not be greater than 'radius_top'")
                     if inner_radius_bottom > outer_radius_bottom:
                         raise ValueError(f"{obj_name}: 'inner_radius_bottom' must not be greater than 'radius_bottom'")
+                    if inner_radius_top <= 0 :
+                        raise ValueError(f"{obj_name}: 'inner_radius_top' must be positive")
+                    if inner_radius_bottom <= 0:
+                        raise ValueError(f"{obj_name}: 'inner_radius_bottom' must be positive")
 
                 # If subdivided is enabled, check both subdivision and inner subdivision must be 20
                 if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
@@ -146,6 +150,8 @@ def validate_vr_objects(json_data):
                     inner_dimension = obj_data["variant"]["hollow"].get("inner_dimension", [0, 0, 0])
                     if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
+                    if any(value for value in inner_dimension):
+                        raise ValueError(f"{obj_name}: 'inner_dimension' must be positive") 
 
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
