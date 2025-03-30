@@ -16,9 +16,9 @@ from datetime import datetime
 load_dotenv()#读取AI api key
 gemini_api_key = os.getenv("GEMINI_API_KEY")#gemini api key
 o3_api_key = os.getenv("O3_API_KEY")#open AI api key
-json_store_location=("C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail\\data.json")#返还的json的存储位置
+ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]#已经完成的体
+json_store_location="C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail"
 voice_location="D:\\test.m4a"
-ALLOWED_CLASS = ["Sphere", "Pyramid", "Cuboid"]  # Updated to include "Pyramid"
 
 ######################################初始化######################################
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -42,6 +42,22 @@ def test():#测试是否能正确调取
 
 ################## Saving and transporting the data ##################
 
+def get_current_time():
+    now = datetime.now()
+    return f"{now.day}{now.hour}{now.minute}{now.second}"
+
+
+def create_empty_json(folder_path, file_name):
+        # 确保文件夹存在
+    os.makedirs(folder_path, exist_ok=True)
+        
+        # 组合完整路径
+    file_path = os.path.join(folder_path, file_name)
+        
+        # 写入空JSON对象
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump({}, f, indent=4)
+
 def save_json_string_to_file(json_string, file_path):
     """
     将包含JSON的字符串保存到指定路径的文件中。
@@ -64,10 +80,12 @@ def save_json_string_to_file(json_string, file_path):
 
         # 将字符串解析为JSON对象（确保字符串是有效的JSON）
         json_data = json.loads(json_string)
-
+        file_name=str(get_current_time())+".json"
         # 将JSON数据写入文件
+        create_empty_json(json_store_location, file_name)
+        file_path = os.path.join(json_store_location,file_name)
         with open(file_path, 'w') as file:
-            json.dump(json_data, file)
+            json.dump(json_data, file, indent=4)
 
         print(f"JSON数据已成功保存到 {file_path}")
     except json.JSONDecodeError as e:
@@ -165,7 +183,6 @@ def parse_shape_instruction():
 
 #parse_shape_instruction()
 
-
 def validate_vr_objects(json_data):
     """
     Args:
@@ -193,6 +210,9 @@ def validate_vr_objects(json_data):
 
             obj_type = obj_data["traits"].get("type")
 
+            if "subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4:
+                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value >= 4")
+
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
 
@@ -216,30 +236,29 @@ def validate_vr_objects(json_data):
                 if obj_data["traits"]["subdivision"] not in allowed_subdivisions:
                     raise ValueError(f"{obj_name}: 'subdivision' for Sphere must be one of {allowed_subdivisions}")
 
-            elif obj_type == "Pyramid":  # Updated to "Pyramid" from "Cylinder"
-                required_keys = ["radius_top", "radius_bottom"]
+            elif obj_type == "Cylinder":
+                required_keys = ["pivot", "rotation"]
                 for key in required_keys:
-                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)):
-                        raise ValueError(f"{obj_name}: '{key}' must be a numeric value")
-                required_list = ["pivot","rotation"]
-                for lst_key in required_list:
-                    if lst_key not in obj_data["traits"] or not isinstance(obj_data["traits"][lst_key], list):
-                        raise ValueError(f"{obj_name}: '{key}' must be a list value")
+                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], list) or len(obj_data["traits"][key]) != 3:
+                        raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
 
+                for key in ["radius_top", "radius_bottom"]:
+                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)) or obj_data["traits"][key] <= 0:
+                        raise ValueError(f"{obj_name}: '{key}' must be a positive numeric value")
 
-                # Check if the subdivision for Pyramid is valid (between 3 and 100)
+                # Check if the subdivision for Cylinder is valid (between 3 and 100)
                 if not (3 <= obj_data["traits"]["subdivision"] <= 100):
-                    raise ValueError(f"{obj_name}: 'subdivision' for Pyramid must be between 3 and 100")
+                    raise ValueError(f"{obj_name}: 'subdivision' for Cylinder must be between 3 and 100")
 
-                # Check hollow condition for Pyramid
-                if "variant" in obj_data and "inner_sub_pyramid" in obj_data["variant"] and obj_data["variant"]["inner_sub_pyramid"]["enabled"] != 0:
-                    inner_radius_top = obj_data["variant"]["inner_sub_pyramid"].get("inner_radius_top", 0)
-                    inner_radius_bottom = obj_data["variant"]["inner_sub_pyramid"].get("inner_radius_bottom", 0)
-                    outer_radius_top = obj_data["traits"].get("radius_top", 0)
-                    outer_radius_bottom = obj_data["traits"].get("radius_bottom", 0)
-                    if inner_radius_top > outer_radius_top:
+                # Check hollow condition for Cylinder
+                if "variant" in obj_data and "inner_sub_cylinder" in obj_data["variant"] and obj_data["variant"]["inner_sub_cylinder"]["enabled"] != 0:
+                    inner_radius_top = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_top", [0, 0])
+                    inner_radius_bottom = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_bottom", [0, 0])
+                    outer_radius_top = obj_data["traits"].get("radius_top", [0, 0])
+                    outer_radius_bottom = obj_data["traits"].get("radius_bottom", [0, 0])
+                    if any(inner > outer for inner, outer in zip(inner_radius_top, outer_radius_top)):
                         raise ValueError(f"{obj_name}: 'inner_radius_top' must not be greater than 'radius_top'")
-                    if inner_radius_bottom > outer_radius_bottom:
+                    if any(inner > outer for inner, outer in zip(inner_radius_bottom, outer_radius_bottom)):
                         raise ValueError(f"{obj_name}: 'inner_radius_bottom' must not be greater than 'radius_bottom'")
 
                 # If subdivided is enabled, check both subdivision and inner subdivision must be 20
@@ -271,7 +290,6 @@ def validate_vr_objects(json_data):
 
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
-
 
 ######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):

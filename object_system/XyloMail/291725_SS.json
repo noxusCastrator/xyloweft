@@ -3,6 +3,8 @@
   {
     "geotype": "Simple",
     "position": [10, 10, 10],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Sphere",
@@ -24,6 +26,8 @@
   {
     "geotype": "Simple",
     "position": [-22, -5, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Sphere",
