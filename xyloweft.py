@@ -15,7 +15,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
 
-print("----------------------------林肯斯大头----------------------------")
+print("----------------------------Xyloweft OS----------------------------")
 base_dir = os.path.abspath(os.path.dirname(__file__))
 lib_dir = os.path.join(base_dir, "lib")
 sys.path.append(lib_dir)
@@ -102,7 +102,7 @@ def process_audio_to_ai(file_path, voice_model, client, chat, txt, jsons, count)
 
 {time}
 
-接下来你会看到对应的对话,请编辑这段对话并返还合法的json格式,不要进行任何前缀或后缀或解释,不要使用单引号,保持缩进。
+接下来你会看到对应的对话,请编辑这段对话并返还合法的json格式,不要进行任何前缀或后缀或解释,不要使用单引号,保持缩进。这段对话里可能会有少量的语病或不清晰的地方，请思考后生成
 {question}
 """)
             cleaned_json_text = response.text.strip("```json").strip("```").strip()
