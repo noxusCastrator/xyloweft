@@ -1,10 +1,20 @@
 import os
 import sys
+import json
+from typing import Dict, Any
+import ffmpeg
+import whisper
+import torch
+from pathlib import Path
+import random
+from openai import OpenAI
+from google import genai
+from dotenv import load_dotenv
+from datetime import datetime
 
 print("programme initiated")
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-
 lib_dir = os.path.join(base_dir, "lib")
 sys.path.append(lib_dir)
 

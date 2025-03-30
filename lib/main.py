@@ -22,7 +22,11 @@ voice_location="D:\\test.m4a"
 
 ######################################初始化######################################
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-voice_model=whisper.load_model('turbo').to(device)
+def load_voice_model():
+    voice_model=whisper.load_model('turbo').to(device)
+    print("voice model loaded")
+    return voice_model
+voice_model=load_voice_model()
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 client = genai.Client(api_key=gemini_api_key)
@@ -209,11 +213,6 @@ def validate_vr_objects(json_data):
                 if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
                     if any(inner > outer for inner, outer in zip(obj_data["variant"]["hollow"]["inner_radius"], obj_data["traits"]["radius"])):
                         raise ValueError(f"{obj_name}: 'inner_radius' must not be greater than 'radius'")
-
-                # Check if the subdivision for Sphere is valid
-                allowed_subdivisions = [4, 6, 8, 12, 20]
-                if obj_data["traits"]["subdivision"] not in allowed_subdivisions:
-                    raise ValueError(f"{obj_name}: 'subdivision' for Sphere must be one of {allowed_subdivisions}")
 
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
