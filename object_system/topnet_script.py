@@ -140,7 +140,7 @@ class GeoGenerator:
         traits 应包含 "width", "height", "depth"
         """
 
-        print("开始生成长方体")
+        #print("开始生成长方体")
         sop_name = "cuboid_sop"
         existing_sop = geo_node.node(sop_name)
 
@@ -160,14 +160,14 @@ class GeoGenerator:
 
         return box_sop
 
-    def create_cylinder(self, geo_node, traits, variants):
+    def create_pyramid(self, geo_node, traits, variants):
         """
         在指定的 geo_node 内创建或复用一个 tube 节点，
         并根据 traits 设置参数。
         traits 应包含 "radius": [rad1, rad2] 和 "height"
         """
 
-        sop_name = "cylinder_sop"
+        sop_name = "pyramid_sop"
         existing_sop = geo_node.node(sop_name)
 
         if existing_sop and existing_sop.type().name() != "tube":
@@ -175,18 +175,75 @@ class GeoGenerator:
             existing_sop = None
 
         if existing_sop is None:
-            tube_sop = geo_node.createNode("tube", sop_name)
-            tube_sop.setDisplayFlag(True)
-            tube_sop.setRenderFlag(True)
+            pyramid_sop = geo_node.createNode("tube", sop_name)
+            pyramid_sop.setDisplayFlag(True)
+            pyramid_sop.setRenderFlag(True)
         else:
-            tube_sop = existing_sop
+            pyramid_sop = existing_sop
 
-        radius = traits.get("radius", [1,1])
-        height = traits.get("height", 1)
-        tube_sop.parm("rad1").set(radius[0])
-        tube_sop.parm("rad2").set(radius[1])
-        tube_sop.parm("height").set(height)
-        return tube_sop
+        now_sop = pyramid_sop
+
+        whether_subdivided = variants.get("subdivided")
+        whether_hollowed = variants.get("inner_sub_cylinder")
+        radius_top = traits.get("radius_top")
+        radius_bottom = traits.get("radius_bottom")
+        height = traits.get("height")
+        subdivision = traits.get("subdivision")
+        inner_radius_top = whether_hollowed.get("inner_radius_top")
+        inner_radius_bottom = whether_hollowed.get("inner_radius_bottom")
+        inner_height = whether_hollowed.get("inner_height")
+        inner_subdivision = whether_hollowed.get("inner_subdivision")
+
+        now_sop.parm("type").set(1)
+        now_sop.parm("rad1").set(radius_top)
+        now_sop.parm("rad2").set(radius_bottom)
+        now_sop.parm("height").set(height)
+        now_sop.parm("cols").set(subdivision)
+
+        if whether_subdivided.get("enabled") == 1:
+            # 创建一个 subdivide 节点
+            subdivide_sop = geo_node.createNode("subdivide", "subdivide_sop")
+            pyramid_sop.parm("type").set(1)
+
+            # 让 subdivide_sop 以 sphere_sop 为输入
+            subdivide_sop.setFirstInput(pyramid_sop)
+
+            # 将 subdivide_sop 作为最终显示节点
+            subdivide_sop.setDisplayFlag(True)
+            subdivide_sop.setRenderFlag(True)
+            # 同时把 sphere_sop 的显示渲染标志关掉
+            pyramid_sop.setDisplayFlag(False)
+            pyramid_sop.setRenderFlag(False)
+
+            # 美观排列节点
+            subdivide_sop.moveToGoodPosition()
+
+            pyramid_sop.parm("scale").set(1.07)
+
+            now_sop = subdivide_sop
+
+        bool_sub_sop = geo_node.createNode("boolean", "boolean_sub")
+        # 设置 boolean 操作为 subtract（请确认参数名称和数值）
+        if bool_sub_sop.parm("op"):
+            bool_sub_sop.parm("op").set(2)  # 假设2代表 subtract
+        bool_sub_sop.setFirstInput(now_sop)
+        bool_sub_sop.moveToGoodPosition()
+
+        if whether_hollowed.get("enabled") == 1:
+            inner_pyramid_sop = geo_node.createNode("tube", "inner")
+            inner_pyramid_sop.parm("type").set(1)
+
+            now_sop = inner_pyramid_sop
+            now_sop.parm("rad1").set(inner_radius_top)
+            now_sop.parm("rad2").set(inner_radius_bottom)
+            now_sop.parm("height").set(inner_height)
+            now_sop.parm("cols").set(inner_subdivision)
+
+            bool_sub_sop.setInput(1, now_sop)
+            now_sop = bool_sub_sop
+            now_sop.setDisplayFlag(True)
+
+        return pyramid_sop
 
     def generate(self):
         """
@@ -217,8 +274,8 @@ class GeoGenerator:
                 self.create_sphere(geo_node, traits, variants)
             elif geo_type == "cuboid":
                 self.create_cuboid(geo_node, traits, variants)
-            elif geo_type == "cylinder":
-                self.create_cylinder(geo_node, traits, variants)
+            elif geo_type == "pyramid":
+                self.create_pyramid(geo_node, traits, variants)
             else:
                 hou.ui.displayMessage("Unknown geometry type for %s: %s" % (geo_name, geo_type))
 
