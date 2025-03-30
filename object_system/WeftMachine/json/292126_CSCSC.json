@@ -2,6 +2,8 @@
   "Ball_0": {
     "geotype": "simple",
     "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits": {
       "type": "Sphere",
       "pivot": [0, 0, 0],
@@ -19,6 +21,8 @@
   "Cuboid_0": {
     "geotype": "simple",
     "position": [0, 1.0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits": {
       "type": "Cuboid",
       "pivot": [0, 0, 0],
@@ -35,6 +39,8 @@
   "Ball_1": {
     "geotype": "simple",
     "position": [0, 3.0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits": {
       "type": "Sphere",
       "pivot": [0, 0, 0],
@@ -52,6 +58,8 @@
   "Cuboid_1": {
     "geotype": "simple",
     "position": [0, 6.0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits": {
       "type": "Cuboid",
       "pivot": [0, 0, 0],
@@ -68,6 +76,8 @@
   "Ball_2": {
     "geotype": "simple",
     "position": [0, 10.0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits": {
       "type": "Sphere",
       "pivot": [0, 0, 0],

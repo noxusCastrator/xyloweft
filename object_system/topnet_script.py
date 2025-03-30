@@ -30,7 +30,7 @@ class GeoGenerator:
             data = json.load(f)
         return data
 
-    def create_geo_node(self, geo_name, position, rotation):
+    def create_geo_node(self, geo_name, position, rotate, scale):
         """
         在 /obj 下创建或获取与 geo_name 同名的 geo 节点，
         并设置其平移位置
@@ -45,7 +45,8 @@ class GeoGenerator:
                 default_file.destroy()
 
         geo_node.parmTuple("t").set(tuple(position))
-        geo_node.parmTuple("r").set(tuple(rotation))
+        geo_node.parmTuple("r").set(tuple(rotate))
+        geo_node.parmTuple("s").set(tuple(scale))
         return geo_node
 
     def create_sphere(self, geo_node, traits):
@@ -69,11 +70,9 @@ class GeoGenerator:
         else:
             sphere_sop = existing_sop
 
-        radius = traits.get("radius", [1,1,1])
+        radius = traits.get("radius")
 
-        sphere_sop.parm("radx").set(radius[0])
-        sphere_sop.parm("rady").set(radius[1])
-        sphere_sop.parm("radz").set(radius[2])
+        sphere_sop.parmTuple("rad").set(tuple(radius))
 
         return sphere_sop
 
@@ -101,9 +100,7 @@ class GeoGenerator:
 
         dimension = traits.get("dimension")
         print(dimension)
-        box_sop.parm("sizex").set(dimension[0])
-        box_sop.parm("sizey").set(dimension[0])
-        box_sop.parm("sizez").set(dimension[0])
+        box_sop.parmTuple("size").set(tuple(dimension))
 
         return box_sop
 
@@ -161,12 +158,16 @@ class GeoGenerator:
         for geo_name, geo_data in self.data.items():
             # 获取物体平移位置
             position = geo_data.get("position")
+            rotate = geo_data.get("rotate")
+            scale = geo_data.get("scale")
             # 获取属性数据
             traits = geo_data.get("traits")
+            # 获取变体数据
+            #variants = geo_data.get("variant")
             # 获取物体类型（转为小写便于比较）
             geo_type = traits.get("type").lower()
             # 创建或获取 /obj 下与 geo_name 同名的 geo 节点
-            geo_node = self.create_geo_node(geo_name, position)
+            geo_node = self.create_geo_node(geo_name, position, rotate, scale)
 
             # 根据类型调用相应的创建方法
             if geo_type == "sphere":

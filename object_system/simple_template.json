@@ -4,7 +4,7 @@
     "geotype": "Simple",
     "position": [0, 0, 0],
     "rotate": [0, 0, 0],
-    "scale": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Sphere",
@@ -33,7 +33,7 @@
     "geotype": "Simple",
     "position": [0, 0, 0],
     "rotate": [0, 0, 0],
-    "scale": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Cuboid",
@@ -57,7 +57,7 @@
     "geotype": "Simple",
     "position": [0, 0, 0],
     "rotate": [0, 0, 0],
-    "scale": [0, 0, 0],
+    "scale": [1, 1, 1],
     "traits":
     {
       "type": "Pyramid",
