@@ -10,6 +10,7 @@ from openai import OpenAI
 from google import genai
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -21,6 +22,7 @@ load_dotenv()
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 o3_api_key = os.getenv("O3_API_KEY")
 
+json_store_location=("C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail\\data.json")
 
 client = genai.Client(api_key=gemini_api_key)
 
@@ -31,7 +33,6 @@ with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as
     education = json.load(file_education)
 with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
     shape = json.load(file_shape)
-
 
 
 
@@ -49,7 +50,6 @@ def save_json_string_to_file(json_string, file_path):
 
     :param json_string: 包含JSON的字符串
     :param file_path: 目标文件路径（包括文件名）
-    :param overwrite: 是否覆盖已存在的文件(默认为False)
     """
     try:
         # 检查文件是否已存在
@@ -57,18 +57,25 @@ def save_json_string_to_file(json_string, file_path):
             print(f"文件 {file_path} 已存在，未覆盖。")
 
         # 确保目标文件夹存在，如果不存在则创建
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        dir_path = os.path.dirname(file_path)
+        if dir_path:  # 如果路径包含目录
+            os.makedirs(dir_path, exist_ok=True)
+            if not os.access(dir_path, os.W_OK):
+                print(f"无权限在目录 {dir_path} 中创建文件。")
+                return
 
         # 将字符串解析为JSON对象（确保字符串是有效的JSON）
         json_data = json.loads(json_string)
 
         # 将JSON数据写入文件
-        with open(file_path, 'w', encoding='utf-8') as file:
-            json.dump(json_data, file, ensure_ascii=False, indent=4)
+        with open(file_path, 'w') as file:
+            json.dump(json_data, file)
 
         print(f"JSON数据已成功保存到 {file_path}")
     except json.JSONDecodeError as e:
         print(f"JSON字符串解析失败: {e}")
+    except PermissionError:
+        print(f"无权限写入文件或目录: {file_path}")
     except Exception as e:
         print(f"保存文件时发生错误: {e}")
 
@@ -133,7 +140,7 @@ def parse_shape_instruction():
     #print(response.text)
     cleaned_json_text = response.text.strip("```json").strip("```").strip()
     print(cleaned_json_text)
-    save_json_string_to_file(cleaned_json_text, "C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail")
+    save_json_string_to_file(cleaned_json_text, json_store_location)
     #raw_response = client.responses.create(
     #model="gpt-4o",
     #input = [{"role":"user", "content":prompt}]
