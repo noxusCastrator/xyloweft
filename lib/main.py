@@ -40,7 +40,6 @@ def test():#测试是否能正确调取
     print("muthaphuckaa")
     return 5
 
-
 ################## Saving and transporting the data ##################
 
 def save_json_string_to_file(json_string, file_path):
@@ -165,9 +164,8 @@ def parse_shape_instruction():
     #print(json.dumps(parsed_json, indent=4))
 
 #parse_shape_instruction()
-import json
 
-ALLOWED_CLASS = ["Sphere", "Cylinder", "Cuboid"]  # Assuming these are the allowed object types
+
 
 def validate_vr_objects(json_data):
     """
