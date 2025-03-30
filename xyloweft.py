@@ -12,7 +12,7 @@ from google import genai
 from dotenv import load_dotenv
 from datetime import datetime
 
-print("programme initiated")
+print("----------------------------林肯斯大头----------------------------")
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 lib_dir = os.path.join(base_dir, "lib")
