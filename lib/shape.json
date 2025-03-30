@@ -1,82 +1,89 @@
 {
-    "Sphere Class":
+  "Sphere Class":
+  {
+    "geotype": "Simple",
+    "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [0, 0, 0],
+    "traits":
     {
-      "geotype": "Simple",
-      "position": [0, 0, 0],
-      "traits":
-      {
-        "type": "Sphere",
-        "pivot": [0, 0, 0],
-        "rotation": [0, 0, 0],
-        "radius": [5, 5, 5],
-        "subdivision": 20
-      },
-      "variant":
-      {
-        "hollow":
-        {
-          "enabled": 0,
-          "inner_radius": [4, 4, 4]
-        },
-        "subdivided":
-        {
-          "enabled": 1
-        }
-      }
+      "type": "Sphere",
+      "pivot": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "radius": [5, 5, 5],
+      "subdivision": 20
     },
-  
-    "Cuboid Class":
+    "variant":
     {
-      "geotype": "Simple",
-      "position": [0, 0, 0],
-      "traits":
+      "hollow":
       {
-        "type": "Cuboid",
+        "enabled": 0,
         "pivot": [0, 0, 0],
-        "rotation": [0, 0, 0],
-        "dimension": [10, 10, 8]
+        "inner_radius": [4, 4, 4]
       },
-      "variant":
+      "subdivided":
       {
-        "hollow":
-        {
-          "enabled": 0,
-          "inner_dimension": [9, 8, 7]
-        }
+        "enabled": 1
       }
-    },
-  
-    "Pyramid Class":
+    }
+  },
+
+  "Cuboid Class":
+  {
+    "geotype": "Simple",
+    "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [0, 0, 0],
+    "traits":
     {
-      "geotype": "Simple",
-      "position": [0, 0, 0],
-      "traits":
+      "type": "Cuboid",
+      "pivot": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "dimension": [10, 10, 8]
+    },
+    "variant":
+    {
+      "hollow":
       {
-        "type": "Pyramid",
+        "enabled": 0,
         "pivot": [0, 0, 0],
-        "rotation": [0, 0, 0],
-        "radius_top": 5,
-        "radius_bottom": 5,
-        "height": 10,
-        "subdivision": 20
-      },
-      "variant":
+        "inner_dimension": [9, 8, 7]
+      }
+    }
+  },
+
+  "Pyramid Class":
+  {
+    "geotype": "Simple",
+    "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [0, 0, 0],
+    "traits":
+    {
+      "type": "Pyramid",
+      "pivot": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "radius_top": 5,
+      "radius_bottom": 5,
+      "height": 10,
+      "subdivision": 20
+    },
+    "variant":
+    {
+      "inner_sub_cylinder":
       {
-        "inner_sub_cylinder":
-        {
-          "enabled": 0,
-          "inner_pivot": [0, 0, 0],
-          "inner_rotation": [0, 0, 0],
-          "inner_radius_top": 4,
-          "inner_radius_bottom": 4,
-          "inner_height": 10,
-          "inner_subdivision": 20
-        },
-        "subdivided":
-        {
-          "enabled": 0
-        }
+        "enabled": 0,
+        "inner_pivot": [0, 0, 0],
+        "inner_rotation": [0, 0, 0],
+        "inner_radius_top": 4,
+        "inner_radius_bottom": 4,
+        "inner_height": 10,
+        "inner_subdivision": 20
+      },
+      "subdivided":
+      {
+        "enabled": 0
       }
     }
   }
-  
+}

@@ -88,6 +88,11 @@ def validate_vr_objects(json_data):
                 if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
                     if any(inner > outer for inner, outer in zip(obj_data["variant"]["hollow"]["inner_radius"], obj_data["traits"]["radius"])):
                         raise ValueError(f"{obj_name}: 'inner_radius' must not be greater than 'radius'")
+                for key in ["pivot", "inner_radius"]:
+                    if key not in obj_data["variant"]["hollow"] or not isinstance(obj_data["variant"]["hollow"][key], list) or len(obj_data["variant"]["hollow"][key]) != 3:
+                        raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
+                if any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_radius"]):
+                    raise ValueError(f"{obj_name}: 'inner_radius' values must all be positive")
 
                 # Check if the subdivision for Sphere is valid
                 allowed_subdivisions = [4, 6, 8, 12, 20]
