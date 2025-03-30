@@ -13,9 +13,7 @@ import os
 from datetime import datetime
 
 ######################################快捷控制台######################################
-load_dotenv()#读取AI api key
-gemini_api_key = os.getenv("GEMINI_API_KEY")#gemini api key
-o3_api_key = os.getenv("O3_API_KEY")#open AI api key
+
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]#已经完成的体
 json_store_location="C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail"
 voice_location="C:\\Users\\Mark\\Desktop\\xyloweft\\voices\\test.m4a"
@@ -29,12 +27,7 @@ def load_voice_model():
 voice_model=load_voice_model()
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-client = genai.Client(api_key=gemini_api_key)
 
-with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
-    education = json.load(file_education)
-with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
-    shape = json.load(file_shape)
 
 def test():#测试是否能正确调取
     print("muthaphuckaa")
