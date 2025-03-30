@@ -1,5 +1,5 @@
 {
-    "S_s_1_30061222": {
+    "S_s_1_30125256": {
         "geotype": "Simple",
         "position": [
             0.0,
@@ -54,7 +54,211 @@
             }
         }
     },
-    "S_c_2_30061222": {
+    "S_c_2_30125256": {
+        "geotype": "Simple",
+        "position": [
+            -10.0,
+            0.0,
+            0.0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10.0,
+                20.0,
+                10.0
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_3_30125256": {
+        "geotype": "Simple",
+        "position": [
+            10.0,
+            0.0,
+            0.0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10.0,
+                15.0,
+                10.0
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_4_30125256": {
+        "geotype": "Simple",
+        "position": [
+            0.0,
+            0.0,
+            -10.0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10.0,
+                10.0,
+                10.0
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_5_30125256": {
+        "geotype": "Simple",
+        "position": [
+            0.0,
+            0.0,
+            10.0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10.0,
+                5.0,
+                10.0
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_6_30125256": {
         "geotype": "Simple",
         "position": [
             0.0,
@@ -105,7 +309,7 @@
             }
         }
     },
-    "S_s_3_30061222": {
+    "S_s_7_30125256": {
         "geotype": "Simple",
         "position": [
             0.0,
@@ -160,7 +364,7 @@
             }
         }
     },
-    "S_c_4_30061222": {
+    "S_c_8_30125256": {
         "geotype": "Simple",
         "position": [
             0.0,
@@ -211,7 +415,7 @@
             }
         }
     },
-    "S_s_5_30061222": {
+    "S_s_9_30125256": {
         "geotype": "Simple",
         "position": [
             0.0,
@@ -266,11 +470,11 @@
             }
         }
     },
-    "S_c_1_30061343": {
+    "S_p_10_30125256": {
         "geotype": "Simple",
         "position": [
-            10.0,
             0.0,
+            21.5,
             0.0
         ],
         "rotate": [
@@ -284,7 +488,7 @@
             1
         ],
         "traits": {
-            "type": "Cuboid",
+            "type": "pyramid",
             "pivot": [
                 0,
                 0,
@@ -295,178 +499,37 @@
                 0,
                 0
             ],
-            "dimension": [
-                10.0,
-                10.0,
-                10.0
-            ]
+            "radius_top": [
+                0.0,
+                0.0
+            ],
+            "radius_bottom": [
+                5.0,
+                5.0
+            ],
+            "height": 10.0,
+            "subdivision": 20
         },
         "variant": {
-            "hollow": {
+            "inner_sub_cylinder": {
                 "enabled": 0,
-                "pivot": [
+                "inner_pivot": [
                     0,
                     0,
                     0
                 ],
-                "inner_dimension": [
-                    9,
-                    8,
-                    7
-                ]
-            }
-        }
-    },
-    "S_c_2_30061343": {
-        "geotype": "Simple",
-        "position": [
-            -10.0,
-            0.0,
-            0.0
-        ],
-        "rotate": [
-            0,
-            0,
-            0
-        ],
-        "scale": [
-            1,
-            1,
-            1
-        ],
-        "traits": {
-            "type": "Cuboid",
-            "pivot": [
-                0,
-                0,
-                0
-            ],
-            "rotation": [
-                0,
-                0,
-                0
-            ],
-            "dimension": [
-                10.0,
-                10.0,
-                10.0
-            ]
-        },
-        "variant": {
-            "hollow": {
-                "enabled": 0,
-                "pivot": [
+                "inner_rotation": [
                     0,
                     0,
                     0
                 ],
-                "inner_dimension": [
-                    9,
-                    8,
-                    7
-                ]
-            }
-        }
-    },
-    "S_c_3_30061343": {
-        "geotype": "Simple",
-        "position": [
-            0.0,
-            0.0,
-            10.0
-        ],
-        "rotate": [
-            0,
-            0,
-            0
-        ],
-        "scale": [
-            1,
-            1,
-            1
-        ],
-        "traits": {
-            "type": "Cuboid",
-            "pivot": [
-                0,
-                0,
-                0
-            ],
-            "rotation": [
-                0,
-                0,
-                0
-            ],
-            "dimension": [
-                10.0,
-                10.0,
-                10.0
-            ]
-        },
-        "variant": {
-            "hollow": {
-                "enabled": 0,
-                "pivot": [
-                    0,
-                    0,
-                    0
-                ],
-                "inner_dimension": [
-                    9,
-                    8,
-                    7
-                ]
-            }
-        }
-    },
-    "S_c_4_30061343": {
-        "geotype": "Simple",
-        "position": [
-            0.0,
-            0.0,
-            -10.0
-        ],
-        "rotate": [
-            0,
-            0,
-            0
-        ],
-        "scale": [
-            1,
-            1,
-            1
-        ],
-        "traits": {
-            "type": "Cuboid",
-            "pivot": [
-                0,
-                0,
-                0
-            ],
-            "rotation": [
-                0,
-                0,
-                0
-            ],
-            "dimension": [
-                10.0,
-                10.0,
-                10.0
-            ]
-        },
-        "variant": {
-            "hollow": {
-                "enabled": 0,
-                "pivot": [
-                    0,
-                    0,
-                    0
-                ],
-                "inner_dimension": [
-                    9,
-                    8,
-                    7
-                ]
+                "inner_radius_top": 4,
+                "inner_radius_bottom": 4,
+                "inner_height": 10,
+                "inner_subdivision": 20
+            },
+            "subdivided": {
+                "enabled": 1
             }
         }
     }

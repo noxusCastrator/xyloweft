@@ -1,0 +1,257 @@
+{
+    "S_c_1_30132901": {
+        "geotype": "Simple",
+        "position": [
+            0,
+            0,
+            0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10,
+                10,
+                8
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_2_30132901": {
+        "geotype": "Simple",
+        "position": [
+            0,
+            8,
+            0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10,
+                10,
+                8
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_3_30132901": {
+        "geotype": "Simple",
+        "position": [
+            0,
+            16,
+            0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10,
+                10,
+                8
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_4_30132901": {
+        "geotype": "Simple",
+        "position": [
+            0,
+            24,
+            0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10,
+                10,
+                8
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    },
+    "S_c_5_30132901": {
+        "geotype": "Simple",
+        "position": [
+            0,
+            32,
+            0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Cuboid",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "dimension": [
+                10,
+                10,
+                8
+            ]
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_dimension": [
+                    9,
+                    8,
+                    7
+                ]
+            }
+        }
+    }
+}
