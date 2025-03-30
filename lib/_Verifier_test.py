@@ -41,6 +41,10 @@ import json
 ALLOWED_CLASS = ["Sphere", "Pyramid", "Cuboid"]  # Updated to include "Pyramid"
 
 
+
+
+
+
 def validate_vr_objects(json_data):
     """
     Args:
@@ -92,10 +96,15 @@ def validate_vr_objects(json_data):
                     raise ValueError(f"{obj_name}: 'subdivision' for Sphere must be one of {allowed_subdivisions}")
 
             elif obj_type == "Pyramid":  # Updated to "Pyramid" from "Cylinder"
-                required_keys = ["pivot", "rotation", "radius_top", "radius_bottom"]
+                required_keys = ["radius_top", "radius_bottom"]
                 for key in required_keys:
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)):
                         raise ValueError(f"{obj_name}: '{key}' must be a numeric value")
+                required_list = ["pivot","rotation"]
+                for lst_key in required_list:
+                    if lst_key not in obj_data["traits"] or not isinstance(obj_data["traits"[lst_key]], list):
+                        raise ValueError(f"{obj_name}: '{key}' must be a list value")
+
 
                 # Check if the subdivision for Pyramid is valid (between 3 and 100)
                 if not (3 <= obj_data["traits"]["subdivision"] <= 100):
@@ -142,7 +151,6 @@ def validate_vr_objects(json_data):
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
 
-    
 
 
 def main():
