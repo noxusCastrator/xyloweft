@@ -30,7 +30,7 @@ class GeoGenerator:
             data = json.load(f)
         return data
 
-    def create_geo_node(self, geo_name, position):
+    def create_geo_node(self, geo_name, position, rotation):
         """
         在 /obj 下创建或获取与 geo_name 同名的 geo 节点，
         并设置其平移位置
@@ -43,7 +43,9 @@ class GeoGenerator:
             default_file = geo_node.node("file1")
             if default_file:
                 default_file.destroy()
+
         geo_node.parmTuple("t").set(tuple(position))
+        geo_node.parmTuple("r").set(tuple(rotation))
         return geo_node
 
     def create_sphere(self, geo_node, traits):
@@ -68,6 +70,7 @@ class GeoGenerator:
             sphere_sop = existing_sop
 
         radius = traits.get("radius", [1,1,1])
+
         sphere_sop.parm("radx").set(radius[0])
         sphere_sop.parm("rady").set(radius[1])
         sphere_sop.parm("radz").set(radius[2])
@@ -157,11 +160,11 @@ class GeoGenerator:
 
         for geo_name, geo_data in self.data.items():
             # 获取物体平移位置
-            position = geo_data.get("position", [0,0,0])
+            position = geo_data.get("position")
             # 获取属性数据
-            traits = geo_data.get("traits", {})
+            traits = geo_data.get("traits")
             # 获取物体类型（转为小写便于比较）
-            geo_type = traits.get("type", "").lower()
+            geo_type = traits.get("type").lower()
             # 创建或获取 /obj 下与 geo_name 同名的 geo 节点
             geo_node = self.create_geo_node(geo_name, position)
 
@@ -177,6 +180,6 @@ class GeoGenerator:
 
 # ---------------------------
 # 执行部分：
-# 在 TOP 网络中运行该脚本时，work_ite 全局变量应已由上游 File Pattern 节点传入
+# 在 TOP 网络中运行该脚本时，work_item 全局变量应已由上游 File Pattern 节点传入
 generator = GeoGenerator(work_item)
 generator.generate()

@@ -3,6 +3,8 @@
   {
     "geotype": "Simple",
     "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [0, 0, 0],
     "traits":
     {
       "type": "Sphere",
@@ -30,6 +32,8 @@
   {
     "geotype": "Simple",
     "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [0, 0, 0],
     "traits":
     {
       "type": "Cuboid",
@@ -52,6 +56,8 @@
   {
     "geotype": "Simple",
     "position": [0, 0, 0],
+    "rotate": [0, 0, 0],
+    "scale": [0, 0, 0],
     "traits":
     {
       "type": "Pyramid",
