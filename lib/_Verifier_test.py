@@ -40,6 +40,11 @@ def validate_vr_objects(json_data):
 
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
+            
+            obj_scale = obj_data.get("scale")
+
+            if any(value <= 0 for value in obj_scale):
+                raise ValueError(f"{obj_name}: 'scale' must be a number larger than 0")
 
             # Validate object-specific attributes
             if obj_type == "Sphere":
