@@ -49,7 +49,7 @@ class GeoGenerator:
         geo_node.parmTuple("s").set(tuple(scale))
         return geo_node
 
-    def create_sphere(self, geo_node, traits):
+    def create_sphere(self, geo_node, traits, variants):
         """
         在指定的 geo_node 内创建或复用一个 sphere 节点，
         并根据 traits 设置半径（radius）参数。
@@ -70,6 +70,7 @@ class GeoGenerator:
         else:
             sphere_sop = existing_sop
 
+        if traits.get("radius"):
         radius = traits.get("radius")
 
         sphere_sop.parmTuple("rad").set(tuple(radius))
@@ -97,14 +98,13 @@ class GeoGenerator:
             box_sop.setRenderFlag(True)
         else:
             box_sop = existing_sop
-
+        
         dimension = traits.get("dimension")
-        print(dimension)
         box_sop.parmTuple("size").set(tuple(dimension))
 
         return box_sop
 
-    def create_cylinder(self, geo_node, traits):
+    def create_cylinder(self, geo_node, traits, variants):
         """
         在指定的 geo_node 内创建或复用一个 tube 节点，
         并根据 traits 设置参数。
@@ -163,7 +163,7 @@ class GeoGenerator:
             # 获取属性数据
             traits = geo_data.get("traits")
             # 获取变体数据
-            #variants = geo_data.get("variant")
+            variants = geo_data.get("variant")
             # 获取物体类型（转为小写便于比较）
             geo_type = traits.get("type").lower()
             # 创建或获取 /obj 下与 geo_name 同名的 geo 节点
