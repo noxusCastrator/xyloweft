@@ -230,7 +230,7 @@ class GeoGenerator:
         bool_sub_sop.moveToGoodPosition()
 
         if whether_hollowed.get("enabled") == 1:
-            inner_pyramid_sop = geo_node.createNode("tube", inner)
+            inner_pyramid_sop = geo_node.createNode("tube", "inner")
             inner_pyramid_sop.parm("type").set(1)
 
             now_sop = inner_pyramid_sop
