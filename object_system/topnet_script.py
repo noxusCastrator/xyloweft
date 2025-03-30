@@ -77,6 +77,7 @@ class GeoGenerator:
         if whether_subdivided.get("enabled") == 1:
             # 创建一个 subdivide 节点
             subdivide_sop = geo_node.createNode("subdivide", "subdivide_sop")
+            sphere_sop.parm("type").set(1)
 
             # 让 subdivide_sop 以 sphere_sop 为输入
             subdivide_sop.setFirstInput(sphere_sop)
@@ -90,6 +91,8 @@ class GeoGenerator:
 
             # 美观排列节点
             subdivide_sop.moveToGoodPosition()
+
+            sphere_sop.parm("scale").set(1.07)
 
         radius = traits.get("radius")
 
@@ -154,40 +157,27 @@ class GeoGenerator:
 
     def generate(self):
         """
-        遍历 JSON 数据，为每个物体生成对应的 geo 节点及内部 SOP 节点
-        JSON 文件格式示例：
-        {
-          "Sphere1": {
-              "position": [0, 0, 0],
-              "traits": { "type": "Sphere", "radius": [5, 5, 5] },
-              "variant": { ... }
-          },
-          "Cuboid1": {
-              "position": [10, 0, 0],
-              "traits": { "type": "Cuboid", "width": 6, "height": 4, "depth": 3 },
-              "variant": { ... }
-          },
-          "Cylinder1": {
-              "position": [0, 10, 0],
-              "traits": { "type": "Cylinder", "radius": [3, 3], "height": 8 },
-              "variant": { ... }
-          }
-        }
+        遍历 JSON 数据，为每个物体生成对应的 geo 节点及内部 SOP 节点，
+        每个节点生成后调用 moveToGoodPosition() 使其排列整齐；
+        生成完毕后，将所有 geo 节点添加到同一个 network box 中以便管理。
         """
+        generated_geo_nodes = []
 
         for geo_name, geo_data in self.data.items():
-            # 获取物体平移位置
-            position = geo_data.get("position")
-            rotate = geo_data.get("rotate")
-            scale = geo_data.get("scale")
+            # 获取物体的平移、旋转、缩放，提供默认值
+            position = geo_data.get("position", [0, 0, 0])
+            rotate   = geo_data.get("rotate", [0, 0, 0])
+            scale    = geo_data.get("scale", [1, 1, 1])
             # 获取属性数据
-            traits = geo_data.get("traits")
+            traits = geo_data.get("traits", {})
             # 获取变体数据
-            variants = geo_data.get("variant")
+            variants = geo_data.get("variant", {})
             # 获取物体类型（转为小写便于比较）
-            geo_type = traits.get("type").lower()
+            geo_type = traits.get("type", "").lower()
+
             # 创建或获取 /obj 下与 geo_name 同名的 geo 节点
             geo_node = self.create_geo_node(geo_name, position, rotate, scale)
+            generated_geo_nodes.append(geo_node)
 
             # 根据类型调用相应的创建方法
             if geo_type == "sphere":
@@ -198,6 +188,15 @@ class GeoGenerator:
                 self.create_cylinder(geo_node, traits)
             else:
                 hou.ui.displayMessage("Unknown geometry type for %s: %s" % (geo_name, geo_type))
+
+        # 生成完毕后，将所有生成的 geo 节点添加到同一个 network box 中
+        # 在 /obj 层下创建 network box（不改变节点父子关系）
+        net_box = self.obj_context.createNetworkBox("Generated_Geos")
+        for node in generated_geo_nodes:
+            net_box.addNode(node)
+            node.moveToGoodPosition()
+        net_box.fitAroundContents()
+        # hou.ui.displayMessage("Generated Geo Nodes:\n" + "\n".join([node.path() for node in generated_geo_nodes]))
 
 # ---------------------------
 # 执行部分：
