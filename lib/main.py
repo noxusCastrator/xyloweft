@@ -12,32 +12,27 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 
-ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
+######################################快捷控制台######################################
+load_dotenv()#读取AI api key
+gemini_api_key = os.getenv("GEMINI_API_KEY")#gemini api key
+o3_api_key = os.getenv("O3_API_KEY")#open AI api key
+json_store_location=("C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail\\data.json")#返还的json的存储位置
+ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]#已经完成的体
+voice_location="D:\\test.m4a"
+
+######################################初始化######################################
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 voice_model=whisper.load_model('turbo').to(device)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Get API keys
-load_dotenv()
-gemini_api_key = os.getenv("GEMINI_API_KEY")
-o3_api_key = os.getenv("O3_API_KEY")
-
-json_store_location=("C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail\\data.json")
-
 client = genai.Client(api_key=gemini_api_key)
-
-
-
 
 with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
     education = json.load(file_education)
 with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
     shape = json.load(file_shape)
 
-
-
-
-def test():
+def test():#测试是否能正确调取
     print("muthaphuckaa")
     return 5
 
@@ -105,7 +100,7 @@ def parse_shape_instruction():
     Returns a JSON-formatted string.
     """
 
-    voice_translated_text = "generate in the following order: first generate a ball with radius 1 at 0, 0, 0, then generate a cube with sidelength 2 on the first ball, then ball with radius 3 on the second cube, then cube with sidelength 4 on ball 3, then ball with radius 5 on cube 4"#voice_to_str("D:\\test.m4a")
+    voice_translated_text = voice_to_str(voice_location)
     prompt = f"""
     需求
 
@@ -141,6 +136,7 @@ def parse_shape_instruction():
     cleaned_json_text = response.text.strip("```json").strip("```").strip()
     print(cleaned_json_text)
     save_json_string_to_file(cleaned_json_text, json_store_location)
+    return cleaned_json_text
     #raw_response = client.responses.create(
     #model="gpt-4o",
     #input = [{"role":"user", "content":prompt}]
@@ -164,9 +160,7 @@ def parse_shape_instruction():
     # Pretty-print the extracted JSON
     #print(json.dumps(parsed_json, indent=4))
 
-parse_shape_instruction()
-
-
+#parse_shape_instruction()
 def validate_vr_objects(json_data):
     """
     Args:
@@ -215,6 +209,11 @@ def validate_vr_objects(json_data):
                     if any(inner > outer for inner, outer in zip(obj_data["variant"]["hollow"]["inner_radius"], obj_data["traits"]["radius"])):
                         raise ValueError(f"{obj_name}: 'inner_radius' must not be greater than 'radius'")
 
+                # Check if the subdivision for Sphere is valid
+                allowed_subdivisions = [4, 6, 8, 12, 20]
+                if obj_data["traits"]["subdivision"] not in allowed_subdivisions:
+                    raise ValueError(f"{obj_name}: 'subdivision' for Sphere must be one of {allowed_subdivisions}")
+
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
                 for key in required_keys:
@@ -251,6 +250,17 @@ def validate_vr_objects(json_data):
                     if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
 
+                # Check if the subdivision for Cuboid is within the valid range
+                if not (3 <= obj_data["traits"]["subdivision"] <= 100):
+                    raise ValueError(f"{obj_name}: 'subdivision' for Cuboid must be between 3 and 100")
+
+                # If subdivided is enabled, check both subdivision and inner subdivision must be 20
+                if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
+                    if obj_data["traits"]["subdivision"] != 20:
+                        raise ValueError(f"{obj_name}: 'subdivision' must be 20 when 'subdivided' is enabled")
+                    if "inner_subdivision" in obj_data["variant"]["subdivided"] and obj_data["variant"]["subdivided"]["inner_subdivision"] != 20:
+                        raise ValueError(f"{obj_name}: 'inner_subdivision' must be 20 when 'subdivided' is enabled")
+
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
 
@@ -258,6 +268,7 @@ def validate_vr_objects(json_data):
 
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
+    
 
 ######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):

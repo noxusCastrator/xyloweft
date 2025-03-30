@@ -1,24 +1,30 @@
 import os
 import sys
 
-# Print debugging info
-print("Step 1: Start script")
+print("programme initiated")
 
-# Get the absolute path of the current directory
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
-# Add 'lib/' to sys.path so Python can find it
 lib_dir = os.path.join(base_dir, "lib")
 sys.path.append(lib_dir)
 
-print("Step 2: sys.path updated")
-print(sys.path)  # Print the paths to check if 'lib/' is there
-
-# Try to import main.py
+#print(sys.path)  
 try:
     import main
-    print("Step 3: Successfully imported main.py")
+    print("Successfully imported main.py")
 except ModuleNotFoundError:
-    print("Error: main.py was not found! Check your paths.")
+    print("Error: main.py was not found")
 
-print("Step 4: End of script")
+while True:
+    x=input("welcome to temp os, type run to initiate the program, type break to end the program")
+    if x=="run":
+        string=main.voice_to_str(main.voice_location)
+        json=main.parse_shape_instruction()
+        print("json")
+        print("done")
+    elif x=="break":
+        break
+
+
+
+
