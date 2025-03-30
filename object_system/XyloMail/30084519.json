@@ -1,0 +1,112 @@
+{
+    "S_s_1_30084453": {
+        "geotype": "Simple",
+        "position": [
+            0.0,
+            0.0,
+            1.0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Sphere",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "radius": [
+                3.0,
+                2.0,
+                3.0
+            ],
+            "subdivision": 20
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_radius": [
+                    4,
+                    4,
+                    4
+                ]
+            },
+            "subdivided": {
+                "enabled": 1
+            }
+        }
+    },
+    "S_s_2_30084453": {
+        "geotype": "Simple",
+        "position": [
+            10.0,
+            -5.0,
+            -5.0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Sphere",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "radius": [
+                2.0,
+                2.0,
+                2.0
+            ],
+            "subdivision": 20
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_radius": [
+                    4,
+                    4,
+                    4
+                ]
+            },
+            "subdivided": {
+                "enabled": 1
+            }
+        }
+    }
+}

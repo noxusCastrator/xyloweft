@@ -1,0 +1,57 @@
+{
+    "S_s_1_30052327": {
+        "geotype": "Simple",
+        "position": [
+            0,
+            0,
+            0
+        ],
+        "rotate": [
+            0,
+            0,
+            0
+        ],
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "traits": {
+            "type": "Sphere",
+            "pivot": [
+                0,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "radius": [
+                3.0,
+                3.0,
+                3.0
+            ],
+            "subdivision": 20
+        },
+        "variant": {
+            "hollow": {
+                "enabled": 0,
+                "pivot": [
+                    0,
+                    0,
+                    0
+                ],
+                "inner_radius": [
+                    4,
+                    4,
+                    4
+                ]
+            },
+            "subdivided": {
+                "enabled": 1
+            }
+        }
+    }
+}

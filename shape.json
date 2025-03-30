@@ -72,7 +72,7 @@
     {
       "inner_sub_cylinder":
       {
-        "enabled": 1,
+        "enabled": 0,
         "inner_pivot": [0, 0, 0],
         "inner_rotation": [0, 0, 0],
         "inner_radius_top": 4,
