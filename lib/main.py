@@ -159,6 +159,7 @@ def parse_shape_instruction():
 
 parse_shape_instruction()
 
+
 def validate_vr_objects(json_data):
     """
     Args:
@@ -201,7 +202,11 @@ def validate_vr_objects(json_data):
 
                 if any(value <= 0 for value in obj_data["traits"]["radius"]):
                     raise ValueError(f"{obj_name}: 'radius' values must all be positive")
-                
+
+                # Check hollow condition for Sphere
+                if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
+                    if any(inner > outer for inner, outer in zip(obj_data["variant"]["hollow"]["inner_radius"], obj_data["traits"]["radius"])):
+                        raise ValueError(f"{obj_name}: 'inner_radius' must not be greater than 'radius'")
 
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
@@ -209,9 +214,20 @@ def validate_vr_objects(json_data):
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], list) or len(obj_data["traits"][key]) != 3:
                         raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
 
-                for key in ["radius_positive", "radius_negative"]:
+                for key in ["radius_top", "radius_bottom"]:
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)) or obj_data["traits"][key] <= 0:
                         raise ValueError(f"{obj_name}: '{key}' must be a positive numeric value")
+
+                # Check hollow condition for Cylinder
+                if "variant" in obj_data and "inner_sub_cylinder" in obj_data["variant"] and obj_data["variant"]["inner_sub_cylinder"]["enabled"] != 0:
+                    inner_radius_top = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_top", [0, 0])
+                    inner_radius_bottom = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_bottom", [0, 0])
+                    outer_radius_top = obj_data["traits"].get("radius_top", [0, 0])
+                    outer_radius_bottom = obj_data["traits"].get("radius_bottom", [0, 0])
+                    if any(inner > outer for inner, outer in zip(inner_radius_top, outer_radius_top)):
+                        raise ValueError(f"{obj_name}: 'inner_radius_top' must not be greater than 'radius_top'")
+                    if any(inner > outer for inner, outer in zip(inner_radius_bottom, outer_radius_bottom)):
+                        raise ValueError(f"{obj_name}: 'inner_radius_bottom' must not be greater than 'radius_bottom'")
 
             elif obj_type == "Cuboid":
                 required_keys = ["pivot", "rotation", "dimension"]
@@ -221,13 +237,12 @@ def validate_vr_objects(json_data):
 
                 if any(value <= 0 for value in obj_data["traits"]["dimension"]):
                     raise ValueError(f"{obj_name}: 'dimension' values must all be positive")
-                
+
                 # Check hollow condition for Cuboid
                 if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
                     inner_dimension = obj_data["variant"]["hollow"].get("inner_dimension", [0, 0, 0])
                     if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
-
 
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
