@@ -95,9 +95,10 @@ class GeoGenerator:
         else:
             box_sop = existing_sop
 
-        width  = traits.get("width", 1)
-        height = traits.get("height", 1)
-        depth  = traits.get("depth", 1)
+        dimension = traits.get("dimension", [1, 1, 1])
+        width  = traits.get(dimension[0], 1)
+        height = traits.get(dimension[1], 1)
+        depth  = traits.get(dimension[2], 1)
         box_sop.parmTuple("size").set((width, height, depth))
 
         return box_sop
