@@ -13,12 +13,10 @@ import os
 from datetime import datetime
 
 ######################################快捷控制台######################################
-load_dotenv()#读取AI api key
-gemini_api_key = os.getenv("GEMINI_API_KEY")#gemini api key
-o3_api_key = os.getenv("O3_API_KEY")#open AI api key
-json_store_location=("C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail\\data.json")#返还的json的存储位置
-voice_location="D:\\test.m4a"
-ALLOWED_CLASS = ["Sphere", "Pyramid", "Cuboid"]  # Updated to include "Pyramid"
+
+ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]#已经完成的体
+json_store_location="C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail"
+voice_location="C:\\Users\\Mark\\Desktop\\xyloweft\\voices\\test.m4a"
 
 ######################################初始化######################################
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -29,18 +27,29 @@ def load_voice_model():
 voice_model=load_voice_model()
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-client = genai.Client(api_key=gemini_api_key)
 
-with open(os.path.join(current_dir, 'education.json'), 'r', encoding='utf-8') as file_education:
-    education = json.load(file_education)
-with open(os.path.join(current_dir, 'shape.json'), 'r', encoding='utf-8') as file_shape:
-    shape = json.load(file_shape)
 
 def test():#测试是否能正确调取
     print("muthaphuckaa")
     return 5
 
 ################## Saving and transporting the data ##################
+
+def get_current_time():
+    now = datetime.now()
+    return f"{now.day}{now.hour}{now.minute}{now.second}"
+
+
+def create_empty_json(folder_path, file_name):
+        # 确保文件夹存在
+    os.makedirs(folder_path, exist_ok=True)
+        
+        # 组合完整路径
+    file_path = os.path.join(folder_path, file_name)
+        
+        # 写入空JSON对象
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump({}, f, indent=4)
 
 def save_json_string_to_file(json_string, file_path):
     """
@@ -64,10 +73,12 @@ def save_json_string_to_file(json_string, file_path):
 
         # 将字符串解析为JSON对象（确保字符串是有效的JSON）
         json_data = json.loads(json_string)
-
+        file_name=str(get_current_time())+".json"
         # 将JSON数据写入文件
+        create_empty_json(json_store_location, file_name)
+        file_path = os.path.join(json_store_location,file_name)
         with open(file_path, 'w') as file:
-            json.dump(json_data, file)
+            json.dump(json_data, file, indent=4)
 
         print(f"JSON数据已成功保存到 {file_path}")
     except json.JSONDecodeError as e:
@@ -103,7 +114,7 @@ def parse_shape_instruction():
     Returns a JSON-formatted string.
     """
 
-    voice_translated_text = voice_to_str(voice_location)
+    voice_translated_text = #voice_to_str(voice_location)
     prompt = f"""
     需求
 
@@ -113,7 +124,7 @@ def parse_shape_instruction():
 
     基础定义
 
-    此处我们先定义三种体：简单体,复杂体和虚拟体,简单体是一个虚拟定义,指一切简单到不需要去通过布尔运算来生成的几何体,如立方体,球体等,复杂体指一切需要通过布尔运算编辑几何体来生成的复杂物件。换句话说,简单体是可以通过平面透视的三视图无损传达的体,而复杂体无法这么传达。虚拟体是一个概念,是对某个物体的交互,在我们达到那个进度之前请不用考虑复杂体和虚拟体。
+    此处我们先定义三种体：简单体,复杂体和虚拟体,简单体是一个虚拟定义,指一切简单到不需要去通过布尔运算来生成的几何体,如立方体,球体等,复杂体指一切需要通过布尔运算编辑几何体来生成的复杂物件。换句话说,简单体是可以通过平面透视的三视图无损传达的体,而复杂体无法这么传达。虚拟体是一个概念,是对某个物体的交互。
 
     文档
 
@@ -165,7 +176,6 @@ def parse_shape_instruction():
 
 #parse_shape_instruction()
 
-
 def validate_vr_objects(json_data):
     """
     Args:
@@ -195,6 +205,11 @@ def validate_vr_objects(json_data):
 
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
+            
+            obj_scale = obj_data.get("scale")
+
+            if any(value <= 0 for value in obj_scale):
+                raise ValueError(f"{obj_name}: 'scale' must be a number larger than 0")
 
             # Validate object-specific attributes
             if obj_type == "Sphere":
@@ -210,6 +225,11 @@ def validate_vr_objects(json_data):
                 if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
                     if any(inner > outer for inner, outer in zip(obj_data["variant"]["hollow"]["inner_radius"], obj_data["traits"]["radius"])):
                         raise ValueError(f"{obj_name}: 'inner_radius' must not be greater than 'radius'")
+                for key in ["pivot", "inner_radius"]:
+                    if key not in obj_data["variant"]["hollow"] or not isinstance(obj_data["variant"]["hollow"][key], list) or len(obj_data["variant"]["hollow"][key]) != 3:
+                        raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
+                if any(value <= 0 for value in obj_data["variant"]["hollow"]["inner_radius"]):
+                    raise ValueError(f"{obj_name}: 'inner_radius' values must all be positive")
 
                 # Check if the subdivision for Sphere is valid
                 allowed_subdivisions = [4, 6, 8, 12, 20]
@@ -232,15 +252,19 @@ def validate_vr_objects(json_data):
                     raise ValueError(f"{obj_name}: 'subdivision' for Pyramid must be between 3 and 100")
 
                 # Check hollow condition for Pyramid
-                if "variant" in obj_data and "inner_sub_pyramid" in obj_data["variant"] and obj_data["variant"]["inner_sub_pyramid"]["enabled"] != 0:
-                    inner_radius_top = obj_data["variant"]["inner_sub_pyramid"].get("inner_radius_top", 0)
-                    inner_radius_bottom = obj_data["variant"]["inner_sub_pyramid"].get("inner_radius_bottom", 0)
+                if "variant" in obj_data and "inner_sub_cylinder" in obj_data["variant"] and obj_data["variant"]["inner_sub_cylinder"]["enabled"] != 0:
+                    inner_radius_top = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_top", 0)
+                    inner_radius_bottom = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_bottom", 0)
                     outer_radius_top = obj_data["traits"].get("radius_top", 0)
                     outer_radius_bottom = obj_data["traits"].get("radius_bottom", 0)
-                    if inner_radius_top > outer_radius_top:
+                    if inner_radius_top >= outer_radius_top:
                         raise ValueError(f"{obj_name}: 'inner_radius_top' must not be greater than 'radius_top'")
-                    if inner_radius_bottom > outer_radius_bottom:
+                    if inner_radius_bottom >= outer_radius_bottom:
                         raise ValueError(f"{obj_name}: 'inner_radius_bottom' must not be greater than 'radius_bottom'")
+                    if inner_radius_top <= 0 :
+                        raise ValueError(f"{obj_name}: 'inner_radius_top' must be positive")
+                    if inner_radius_bottom <= 0:
+                        raise ValueError(f"{obj_name}: 'inner_radius_bottom' must be positive")
 
                 # If subdivided is enabled, check both subdivision and inner subdivision must be 20
                 if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
@@ -263,6 +287,8 @@ def validate_vr_objects(json_data):
                     inner_dimension = obj_data["variant"]["hollow"].get("inner_dimension", [0, 0, 0])
                     if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
+                    if any(value for value in inner_dimension):
+                        raise ValueError(f"{obj_name}: 'inner_dimension' must be positive") 
 
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
@@ -271,7 +297,6 @@ def validate_vr_objects(json_data):
 
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
-
 
 ######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):
