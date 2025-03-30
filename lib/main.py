@@ -161,6 +161,7 @@ def parse_shape_instruction():
     #print(json.dumps(parsed_json, indent=4))
 
 #parse_shape_instruction()
+
 def validate_vr_objects(json_data):
     """
     Args:
@@ -224,6 +225,10 @@ def validate_vr_objects(json_data):
                     if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)) or obj_data["traits"][key] <= 0:
                         raise ValueError(f"{obj_name}: '{key}' must be a positive numeric value")
 
+                # Check if the subdivision for Cylinder is valid (between 3 and 100)
+                if not (3 <= obj_data["traits"]["subdivision"] <= 100):
+                    raise ValueError(f"{obj_name}: 'subdivision' for Cylinder must be between 3 and 100")
+
                 # Check hollow condition for Cylinder
                 if "variant" in obj_data and "inner_sub_cylinder" in obj_data["variant"] and obj_data["variant"]["inner_sub_cylinder"]["enabled"] != 0:
                     inner_radius_top = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_top", [0, 0])
@@ -234,6 +239,13 @@ def validate_vr_objects(json_data):
                         raise ValueError(f"{obj_name}: 'inner_radius_top' must not be greater than 'radius_top'")
                     if any(inner > outer for inner, outer in zip(inner_radius_bottom, outer_radius_bottom)):
                         raise ValueError(f"{obj_name}: 'inner_radius_bottom' must not be greater than 'radius_bottom'")
+
+                # If subdivided is enabled, check both subdivision and inner subdivision must be 20
+                if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
+                    if obj_data["traits"]["subdivision"] != 20:
+                        raise ValueError(f"{obj_name}: 'subdivision' must be 20 when 'subdivided' is enabled")
+                    if "inner_subdivision" in obj_data["variant"]["subdivided"] and obj_data["variant"]["subdivided"]["inner_subdivision"] != 20:
+                        raise ValueError(f"{obj_name}: 'inner_subdivision' must be 20 when 'subdivided' is enabled")
 
             elif obj_type == "Cuboid":
                 required_keys = ["pivot", "rotation", "dimension"]
@@ -250,17 +262,6 @@ def validate_vr_objects(json_data):
                     if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
 
-                # Check if the subdivision for Cuboid is within the valid range
-                if not (3 <= obj_data["traits"]["subdivision"] <= 100):
-                    raise ValueError(f"{obj_name}: 'subdivision' for Cuboid must be between 3 and 100")
-
-                # If subdivided is enabled, check both subdivision and inner subdivision must be 20
-                if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
-                    if obj_data["traits"]["subdivision"] != 20:
-                        raise ValueError(f"{obj_name}: 'subdivision' must be 20 when 'subdivided' is enabled")
-                    if "inner_subdivision" in obj_data["variant"]["subdivided"] and obj_data["variant"]["subdivided"]["inner_subdivision"] != 20:
-                        raise ValueError(f"{obj_name}: 'inner_subdivision' must be 20 when 'subdivided' is enabled")
-
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
 
@@ -268,7 +269,6 @@ def validate_vr_objects(json_data):
 
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
-    
 
 ######################### Encoding JSON Structure ################################
 def generate_unique_key(geotype, class_name, index):
