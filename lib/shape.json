@@ -1,5 +1,5 @@
 {
-    "Sphere_0":
+    "Sphere Class":
     {
       "geotype": "Simple",
       "position": [0, 0, 0],
@@ -20,18 +20,39 @@
         },
         "subdivided":
         {
-          "enabled": 0
+          "enabled": 1
         }
       }
     },
   
-    "Cylinder_0":
+    "Cuboid Class":
     {
       "geotype": "Simple",
       "position": [0, 0, 0],
       "traits":
       {
-        "type": "Cylinder",
+        "type": "Cuboid",
+        "pivot": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "dimension": [10, 10, 8]
+      },
+      "variant":
+      {
+        "hollow":
+        {
+          "enabled": 0,
+          "inner_dimension": [9, 8, 7]
+        }
+      }
+    },
+  
+    "Pyramid Class":
+    {
+      "geotype": "Simple",
+      "position": [0, 0, 0],
+      "traits":
+      {
+        "type": "Pyramid",
         "pivot": [0, 0, 0],
         "rotation": [0, 0, 0],
         "radius_top": 5,
@@ -54,27 +75,6 @@
         "subdivided":
         {
           "enabled": 0
-        }
-      }
-    },
-  
-    "Cuboid_0":
-    {
-      "geotype": "Simple",
-      "position": [0, 0, 0],
-      "traits":
-      {
-        "type": "Cuboid",
-        "pivot": [0, 0, 0],
-        "rotation": [0, 0, 0],
-        "dimension": [10, 10, 8]
-      },
-      "variant":
-      {
-        "hollow":
-        {
-          "enabled": 0,
-          "inner_dimension": [9, 8, 7]
         }
       }
     }
