@@ -18,7 +18,7 @@ gemini_api_key = os.getenv("GEMINI_API_KEY")#gemini api key
 o3_api_key = os.getenv("O3_API_KEY")#open AI api key
 ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]#已经完成的体
 json_store_location="C:\\Users\\Mark\\Desktop\\xyloweft\\object_system\\XyloMail"
-voice_location="D:\\test.m4a"
+voice_location="C:\\Users\\Mark\\Desktop\\xyloweft\\voices\\test.m4a"
 
 ######################################初始化######################################
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -121,7 +121,7 @@ def parse_shape_instruction():
     Returns a JSON-formatted string.
     """
 
-    voice_translated_text = voice_to_str(voice_location)
+    voice_translated_text = #voice_to_str(voice_location)
     prompt = f"""
     需求
 
@@ -131,7 +131,7 @@ def parse_shape_instruction():
 
     基础定义
 
-    此处我们先定义三种体：简单体,复杂体和虚拟体,简单体是一个虚拟定义,指一切简单到不需要去通过布尔运算来生成的几何体,如立方体,球体等,复杂体指一切需要通过布尔运算编辑几何体来生成的复杂物件。换句话说,简单体是可以通过平面透视的三视图无损传达的体,而复杂体无法这么传达。虚拟体是一个概念,是对某个物体的交互,在我们达到那个进度之前请不用考虑复杂体和虚拟体。
+    此处我们先定义三种体：简单体,复杂体和虚拟体,简单体是一个虚拟定义,指一切简单到不需要去通过布尔运算来生成的几何体,如立方体,球体等,复杂体指一切需要通过布尔运算编辑几何体来生成的复杂物件。换句话说,简单体是可以通过平面透视的三视图无损传达的体,而复杂体无法这么传达。虚拟体是一个概念,是对某个物体的交互。
 
     文档
 
