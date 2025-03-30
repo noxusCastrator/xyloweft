@@ -70,7 +70,27 @@ class GeoGenerator:
         else:
             sphere_sop = existing_sop
 
-        if traits.get("radius"):
+        sphere_sop.parm("type").set(1)
+
+        whether_subdivided = variants.get("subdivided")
+
+        if whether_subdivided.get("enabled") == 1:
+            # 创建一个 subdivide 节点
+            subdivide_sop = geo_node.createNode("subdivide", "subdivide_sop")
+
+            # 让 subdivide_sop 以 sphere_sop 为输入
+            subdivide_sop.setFirstInput(sphere_sop)
+
+            # 将 subdivide_sop 作为最终显示节点
+            subdivide_sop.setDisplayFlag(True)
+            subdivide_sop.setRenderFlag(True)
+            # 同时把 sphere_sop 的显示渲染标志关掉
+            sphere_sop.setDisplayFlag(False)
+            sphere_sop.setRenderFlag(False)
+
+            # 美观排列节点
+            subdivide_sop.moveToGoodPosition()
+
         radius = traits.get("radius")
 
         sphere_sop.parmTuple("rad").set(tuple(radius))
@@ -98,13 +118,13 @@ class GeoGenerator:
             box_sop.setRenderFlag(True)
         else:
             box_sop = existing_sop
-        
+
         dimension = traits.get("dimension")
         box_sop.parmTuple("size").set(tuple(dimension))
 
         return box_sop
 
-    def create_cylinder(self, geo_node, traits, variants):
+    def create_cylinder(self, geo_node, traits):
         """
         在指定的 geo_node 内创建或复用一个 tube 节点，
         并根据 traits 设置参数。
@@ -171,7 +191,7 @@ class GeoGenerator:
 
             # 根据类型调用相应的创建方法
             if geo_type == "sphere":
-                self.create_sphere(geo_node, traits)
+                self.create_sphere(geo_node, traits, variants)
             elif geo_type == "cuboid":
                 self.create_cuboid(geo_node, traits)
             elif geo_type == "cylinder":
