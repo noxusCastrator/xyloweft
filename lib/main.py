@@ -223,7 +223,7 @@ def validate_vr_objects(json_data):
                         raise ValueError(f"{obj_name}: '{key}' must be a numeric value")
                 required_list = ["pivot","rotation"]
                 for lst_key in required_list:
-                    if lst_key not in obj_data["traits"] or not isinstance(obj_data["traits"[lst_key]], list):
+                    if lst_key not in obj_data["traits"] or not isinstance(obj_data["traits"][lst_key], list):
                         raise ValueError(f"{obj_name}: '{key}' must be a list value")
 
 

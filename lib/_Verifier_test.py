@@ -44,7 +44,6 @@ ALLOWED_CLASS = ["Sphere", "Pyramid", "Cuboid"]  # Updated to include "Pyramid"
 
 
 
-
 def validate_vr_objects(json_data):
     """
     Args:
@@ -102,7 +101,7 @@ def validate_vr_objects(json_data):
                         raise ValueError(f"{obj_name}: '{key}' must be a numeric value")
                 required_list = ["pivot","rotation"]
                 for lst_key in required_list:
-                    if lst_key not in obj_data["traits"] or not isinstance(obj_data["traits"[lst_key]], list):
+                    if lst_key not in obj_data["traits"] or not isinstance(obj_data["traits"][lst_key], list):
                         raise ValueError(f"{obj_name}: '{key}' must be a list value")
 
 
@@ -150,7 +149,6 @@ def validate_vr_objects(json_data):
 
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
-
 
 
 def main():
