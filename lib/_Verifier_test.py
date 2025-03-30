@@ -5,7 +5,7 @@ with open('shape.json', 'r', encoding='utf-8') as file_shape:
     # 加载 JSON 数据
     shape = json.load(file_shape)
 
-ALLOWED_CLASS = ["Sphere", "Cylinder","Cuboid"]
+# ALLOWED_CLASS = ["Sphere", "Pyramid","Cuboid"]
 def save_json_string_to_file(json_string, file_path):
     """
     将包含JSON的字符串保存到指定路径的文件中。
@@ -36,6 +36,11 @@ def save_json_string_to_file(json_string, file_path):
     except Exception as e:
         print(f"保存文件时发生错误: {e}")
 
+import json
+
+ALLOWED_CLASS = ["Sphere", "Pyramid", "Cuboid"]  # Updated to include "Pyramid"
+
+
 def validate_vr_objects(json_data):
     """
     Args:
@@ -63,9 +68,6 @@ def validate_vr_objects(json_data):
 
             obj_type = obj_data["traits"].get("type")
 
-            if "subdivision" not in obj_data["traits"] or not isinstance(obj_data["traits"]["subdivision"], (int, float)) or obj_data["traits"]["subdivision"] < 4:
-                raise ValueError(f"{obj_name}: 'subdivision' must be a numeric value >= 4")
-
             if obj_type not in ALLOWED_CLASS:
                 raise ValueError(f"{obj_name}: Must be a defined shape")
 
@@ -89,26 +91,33 @@ def validate_vr_objects(json_data):
                 if obj_data["traits"]["subdivision"] not in allowed_subdivisions:
                     raise ValueError(f"{obj_name}: 'subdivision' for Sphere must be one of {allowed_subdivisions}")
 
-            elif obj_type == "Cylinder":
-                required_keys = ["pivot", "rotation"]
+            elif obj_type == "Pyramid":  # Updated to "Pyramid" from "Cylinder"
+                required_keys = ["pivot", "rotation", "radius_top", "radius_bottom"]
                 for key in required_keys:
-                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], list) or len(obj_data["traits"][key]) != 3:
-                        raise ValueError(f"{obj_name}: '{key}' must be a list of three elements")
+                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)):
+                        raise ValueError(f"{obj_name}: '{key}' must be a numeric value")
 
-                for key in ["radius_top", "radius_bottom"]:
-                    if key not in obj_data["traits"] or not isinstance(obj_data["traits"][key], (int, float)) or obj_data["traits"][key] <= 0:
-                        raise ValueError(f"{obj_name}: '{key}' must be a positive numeric value")
+                # Check if the subdivision for Pyramid is valid (between 3 and 100)
+                if not (3 <= obj_data["traits"]["subdivision"] <= 100):
+                    raise ValueError(f"{obj_name}: 'subdivision' for Pyramid must be between 3 and 100")
 
-                # Check hollow condition for Cylinder
-                if "variant" in obj_data and "inner_sub_cylinder" in obj_data["variant"] and obj_data["variant"]["inner_sub_cylinder"]["enabled"] != 0:
-                    inner_radius_top = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_top", [0, 0])
-                    inner_radius_bottom = obj_data["variant"]["inner_sub_cylinder"].get("inner_radius_bottom", [0, 0])
-                    outer_radius_top = obj_data["traits"].get("radius_top", [0, 0])
-                    outer_radius_bottom = obj_data["traits"].get("radius_bottom", [0, 0])
-                    if any(inner > outer for inner, outer in zip(inner_radius_top, outer_radius_top)):
+                # Check hollow condition for Pyramid
+                if "variant" in obj_data and "inner_sub_pyramid" in obj_data["variant"] and obj_data["variant"]["inner_sub_pyramid"]["enabled"] != 0:
+                    inner_radius_top = obj_data["variant"]["inner_sub_pyramid"].get("inner_radius_top", 0)
+                    inner_radius_bottom = obj_data["variant"]["inner_sub_pyramid"].get("inner_radius_bottom", 0)
+                    outer_radius_top = obj_data["traits"].get("radius_top", 0)
+                    outer_radius_bottom = obj_data["traits"].get("radius_bottom", 0)
+                    if inner_radius_top > outer_radius_top:
                         raise ValueError(f"{obj_name}: 'inner_radius_top' must not be greater than 'radius_top'")
-                    if any(inner > outer for inner, outer in zip(inner_radius_bottom, outer_radius_bottom)):
+                    if inner_radius_bottom > outer_radius_bottom:
                         raise ValueError(f"{obj_name}: 'inner_radius_bottom' must not be greater than 'radius_bottom'")
+
+                # If subdivided is enabled, check both subdivision and inner subdivision must be 20
+                if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
+                    if obj_data["traits"]["subdivision"] != 20:
+                        raise ValueError(f"{obj_name}: 'subdivision' must be 20 when 'subdivided' is enabled")
+                    if "inner_subdivision" in obj_data["variant"]["subdivided"] and obj_data["variant"]["subdivided"]["inner_subdivision"] != 20:
+                        raise ValueError(f"{obj_name}: 'inner_subdivision' must be 20 when 'subdivided' is enabled")
 
             elif obj_type == "Cuboid":
                 required_keys = ["pivot", "rotation", "dimension"]
@@ -125,17 +134,6 @@ def validate_vr_objects(json_data):
                     if any(inner > outer for inner, outer in zip(inner_dimension, obj_data["traits"]["dimension"])):
                         raise ValueError(f"{obj_name}: 'inner_dimension' must not be greater than 'dimension'")
 
-                # Check if the subdivision for Cuboid is within the valid range
-                if not (3 <= obj_data["traits"]["subdivision"] <= 100):
-                    raise ValueError(f"{obj_name}: 'subdivision' for Cuboid must be between 3 and 100")
-
-                # If subdivided is enabled, check both subdivision and inner subdivision must be 20
-                if "variant" in obj_data and "subdivided" in obj_data["variant"] and obj_data["variant"]["subdivided"]["enabled"] != 0:
-                    if obj_data["traits"]["subdivision"] != 20:
-                        raise ValueError(f"{obj_name}: 'subdivision' must be 20 when 'subdivided' is enabled")
-                    if "inner_subdivision" in obj_data["variant"]["subdivided"] and obj_data["variant"]["subdivided"]["inner_subdivision"] != 20:
-                        raise ValueError(f"{obj_name}: 'inner_subdivision' must be 20 when 'subdivided' is enabled")
-
             else:
                 raise ValueError(f"{obj_name}: Unknown object type '{obj_type}'")
 
@@ -143,7 +141,10 @@ def validate_vr_objects(json_data):
 
     except (ValueError, TypeError, json.JSONDecodeError) as e:
         return f"Validation Error: {e}"
+
     
+
+
 def main():
     print(validate_vr_objects(shape))
 
