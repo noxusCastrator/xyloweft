@@ -165,6 +165,9 @@ def parse_shape_instruction():
     #print(json.dumps(parsed_json, indent=4))
 
 #parse_shape_instruction()
+import json
+
+ALLOWED_CLASS = ["Sphere", "Cylinder", "Cuboid"]  # Assuming these are the allowed object types
 
 def validate_vr_objects(json_data):
     """
@@ -213,6 +216,11 @@ def validate_vr_objects(json_data):
                 if "variant" in obj_data and "hollow" in obj_data["variant"] and obj_data["variant"]["hollow"]["enabled"] != 0:
                     if any(inner > outer for inner, outer in zip(obj_data["variant"]["hollow"]["inner_radius"], obj_data["traits"]["radius"])):
                         raise ValueError(f"{obj_name}: 'inner_radius' must not be greater than 'radius'")
+
+                # Check if the subdivision for Sphere is valid
+                allowed_subdivisions = [4, 6, 8, 12, 20]
+                if obj_data["traits"]["subdivision"] not in allowed_subdivisions:
+                    raise ValueError(f"{obj_name}: 'subdivision' for Sphere must be one of {allowed_subdivisions}")
 
             elif obj_type == "Cylinder":
                 required_keys = ["pivot", "rotation"]
