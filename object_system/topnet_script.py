@@ -30,7 +30,7 @@ class GeoGenerator:
             data = json.load(f)
         return data
 
-    def create_geo_node(self, geo_name, position):
+    def create_geo_node(self, geo_name, position, rotate, scale):
         """
         在 /obj 下创建或获取与 geo_name 同名的 geo 节点，
         并设置其平移位置
@@ -43,7 +43,10 @@ class GeoGenerator:
             default_file = geo_node.node("file1")
             if default_file:
                 default_file.destroy()
+
         geo_node.parmTuple("t").set(tuple(position))
+        geo_node.parmTuple("r").set(tuple(rotate))
+        geo_node.parmTuple("s").set(tuple(scale))
         return geo_node
 
     def create_sphere(self, geo_node, traits):
@@ -67,10 +70,9 @@ class GeoGenerator:
         else:
             sphere_sop = existing_sop
 
-        radius = traits.get("radius", [1,1,1])
-        sphere_sop.parm("radx").set(radius[0])
-        sphere_sop.parm("rady").set(radius[1])
-        sphere_sop.parm("radz").set(radius[2])
+        radius = traits.get("radius")
+
+        sphere_sop.parmTuple("rad").set(tuple(radius))
 
         return sphere_sop
 
@@ -81,6 +83,7 @@ class GeoGenerator:
         traits 应包含 "width", "height", "depth"
         """
 
+        print("开始生成长方体")
         sop_name = "cuboid_sop"
         existing_sop = geo_node.node(sop_name)
 
@@ -95,11 +98,9 @@ class GeoGenerator:
         else:
             box_sop = existing_sop
 
-        dimension = traits.get("dimension", [1, 1, 1])
-        width  = traits.get(dimension[0], 1)
-        height = traits.get(dimension[1], 1)
-        depth  = traits.get(dimension[2], 1)
-        box_sop.parmTuple("size").set((width, height, depth))
+        dimension = traits.get("dimension")
+        print(dimension)
+        box_sop.parmTuple("size").set(tuple(dimension))
 
         return box_sop
 
@@ -156,13 +157,17 @@ class GeoGenerator:
 
         for geo_name, geo_data in self.data.items():
             # 获取物体平移位置
-            position = geo_data.get("position", [0,0,0])
+            position = geo_data.get("position")
+            rotate = geo_data.get("rotate")
+            scale = geo_data.get("scale")
             # 获取属性数据
-            traits = geo_data.get("traits", {})
+            traits = geo_data.get("traits")
+            # 获取变体数据
+            #variants = geo_data.get("variant")
             # 获取物体类型（转为小写便于比较）
-            geo_type = traits.get("type", "").lower()
+            geo_type = traits.get("type").lower()
             # 创建或获取 /obj 下与 geo_name 同名的 geo 节点
-            geo_node = self.create_geo_node(geo_name, position)
+            geo_node = self.create_geo_node(geo_name, position, rotate, scale)
 
             # 根据类型调用相应的创建方法
             if geo_type == "sphere":
@@ -176,6 +181,6 @@ class GeoGenerator:
 
 # ---------------------------
 # 执行部分：
-# 在 TOP 网络中运行该脚本时，work_ite 全局变量应已由上游 File Pattern 节点传入
+# 在 TOP 网络中运行该脚本时，work_item 全局变量应已由上游 File Pattern 节点传入
 generator = GeoGenerator(work_item)
 generator.generate()
